@@ -36,6 +36,9 @@ public class AuthorController {
     @Autowired
     private ManageAuthor manageAuthorUseCase;
 
+    @Autowired
+    private EntityMapper entityMapper;
+
     @PostMapping(
 		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
 		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
@@ -46,11 +49,11 @@ public class AuthorController {
         tags = { "Author" }
     )
     public ResponseEntity<AuthorResponse> create(@RequestBody AuthorRequest payload) {
-        Author author = EntityMapper.mapEntity(payload, Author.class);
+        Author author = entityMapper.mapEntity(payload, Author.class);
 
         author = manageAuthorUseCase.create(author);
 
-        AuthorResponse response = EntityMapper
+        AuthorResponse response = entityMapper
             .mapEntity(author, AuthorResponse.class)
             .setLinks();
 
@@ -70,7 +73,7 @@ public class AuthorController {
     )
     public ResponseEntity<AuthorResponse> findById(@PathVariable(value = "id") Long id) {
         Author found = manageAuthorUseCase.findById(id);
-        AuthorResponse response = EntityMapper
+        AuthorResponse response = entityMapper
             .mapEntity(found, AuthorResponse.class)
             .setLinks();
 
@@ -87,7 +90,7 @@ public class AuthorController {
     )
     public ResponseEntity<List<AuthorResponse>> findAll() {
         List<Author> found = manageAuthorUseCase.findAll();
-        List<AuthorResponse> response = EntityMapper
+        List<AuthorResponse> response = entityMapper
             .mapList(found, AuthorResponse.class)
             .stream().map(a -> a.setLinks())
             .toList();
@@ -106,12 +109,12 @@ public class AuthorController {
         tags = { "Author" }
     )
     public ResponseEntity<AuthorResponse> update(@PathVariable(value = "id") Long id, @RequestBody AuthorRequest payload) {
-        Author author = EntityMapper.mapEntity(payload, Author.class);
+        Author author = entityMapper.mapEntity(payload, Author.class);
         author.setId(id);
 
         author = manageAuthorUseCase.update(author);
 
-        AuthorResponse response = EntityMapper.mapEntity(author, AuthorResponse.class).setLinks();
+        AuthorResponse response = entityMapper.mapEntity(author, AuthorResponse.class).setLinks();
 
         return ResponseEntity.ok(response);
     }

@@ -36,6 +36,9 @@ public class PublisherController {
 	@Autowired
     private ManagePublisher managePublisherUseCase;
 
+    @Autowired
+    private EntityMapper entityMapper;
+
 	@PostMapping(
 		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
 		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
@@ -46,11 +49,11 @@ public class PublisherController {
         tags = { "Publisher" }
     )
     public ResponseEntity<PublisherResponse> create(@RequestBody PublisherRequest payload) {
-        Publisher publisher = EntityMapper.mapEntity(payload, Publisher.class);
+        Publisher publisher = entityMapper.mapEntity(payload, Publisher.class);
 
         publisher = managePublisherUseCase.create(publisher);
 
-        PublisherResponse response = EntityMapper
+        PublisherResponse response = entityMapper
             .mapEntity(publisher, PublisherResponse.class)
             .setLinks();
 
@@ -70,7 +73,7 @@ public class PublisherController {
     )
     public ResponseEntity<PublisherResponse> findById(@PathVariable(value = "id") Long id) {
         Publisher found = managePublisherUseCase.findById(id);
-        PublisherResponse response = EntityMapper
+        PublisherResponse response = entityMapper
             .mapEntity(found, PublisherResponse.class)
             .setLinks();
 
@@ -87,7 +90,7 @@ public class PublisherController {
     )
     public ResponseEntity<List<PublisherResponse>> findAll() {
         List<Publisher> found = managePublisherUseCase.findAll();
-        List<PublisherResponse> response = EntityMapper
+        List<PublisherResponse> response = entityMapper
             .mapList(found, PublisherResponse.class)
             .stream().map(a -> a.setLinks())
             .toList();
@@ -106,12 +109,12 @@ public class PublisherController {
         tags = { "Publisher" }
     )
     public ResponseEntity<PublisherResponse> update(@PathVariable(value = "id") Long id, @RequestBody PublisherRequest payload) {
-        Publisher publisher = EntityMapper.mapEntity(payload, Publisher.class);
+        Publisher publisher = entityMapper.mapEntity(payload, Publisher.class);
         publisher.setId(id);
 
         publisher = managePublisherUseCase.update(publisher);
 
-        PublisherResponse response = EntityMapper.mapEntity(publisher, PublisherResponse.class).setLinks();
+        PublisherResponse response = entityMapper.mapEntity(publisher, PublisherResponse.class).setLinks();
 
         return ResponseEntity.ok(response);
     }

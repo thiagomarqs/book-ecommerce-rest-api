@@ -36,6 +36,9 @@ public class CategoryController {
 	@Autowired
     private ManageCategory manageCategoryUseCase;
 
+    @Autowired
+    private EntityMapper entityMapper;
+
 	@PostMapping(
 		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
 		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
@@ -46,11 +49,11 @@ public class CategoryController {
         tags = { "Category" }
     )
     public ResponseEntity<CategoryResponse> create(@RequestBody CategoryRequest payload) {
-        Category category = EntityMapper.mapEntity(payload, Category.class);
+        Category category = entityMapper.mapEntity(payload, Category.class);
 
         category = manageCategoryUseCase.create(category);
 
-        CategoryResponse response = EntityMapper
+        CategoryResponse response = entityMapper
             .mapEntity(category, CategoryResponse.class)
             .setLinks();
 
@@ -70,7 +73,7 @@ public class CategoryController {
     )
     public ResponseEntity<CategoryResponse> findById(@PathVariable(value = "id") Long id) {
         Category found = manageCategoryUseCase.findById(id);
-        CategoryResponse response = EntityMapper
+        CategoryResponse response = entityMapper
             .mapEntity(found, CategoryResponse.class)
             .setLinks();
 
@@ -87,7 +90,7 @@ public class CategoryController {
     )
     public ResponseEntity<List<CategoryResponse>> findAll() {
         List<Category> found = manageCategoryUseCase.findAll();
-        List<CategoryResponse> response = EntityMapper
+        List<CategoryResponse> response = entityMapper
             .mapList(found, CategoryResponse.class)
             .stream().map(a -> a.setLinks())
             .toList();
@@ -106,12 +109,12 @@ public class CategoryController {
         tags = { "Category" }
     )
     public ResponseEntity<CategoryResponse> update(@PathVariable(value = "id") Long id, @RequestBody CategoryRequest payload) {
-        Category category = EntityMapper.mapEntity(payload, Category.class);
+        Category category = entityMapper.mapEntity(payload, Category.class);
         category.setId(id);
 
         category = manageCategoryUseCase.update(category);
 
-        CategoryResponse response = EntityMapper.mapEntity(category, CategoryResponse.class).setLinks();
+        CategoryResponse response = entityMapper.mapEntity(category, CategoryResponse.class).setLinks();
 
         return ResponseEntity.ok(response);
     }

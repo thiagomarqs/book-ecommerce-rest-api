@@ -18,8 +18,19 @@ public class ManageBook {
 	private BookRepository repository;
 	
 	public Book create(Book book) {
-		if(book.equals(null)) throw new InvalidEntityException("No book was informed.");	
+
+		if(book.equals(null)) { 
+			throw new InvalidEntityException("No book was informed.");
+		}
 		
+		if(repository.existsBySku(book.getSku())) {
+			throw new InvalidEntityException(String.format("A book with the sku '%s' already exists.", book.getSku()));
+		}
+
+		if(repository.existsByIsbn(book.getIsbn())) { 
+			throw new InvalidEntityException(String.format("A book with the ISBN '%s' already exists.", book.getIsbn()));
+		};
+
 		book.setCreatedAt(LocalDate.now());
 		
 		return repository.save(book);
@@ -30,7 +41,7 @@ public class ManageBook {
 		
 		return repository
 			.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " was not found."));
+			.orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " was not found."));
 	}
 	
 	public List<Book> findAll() {

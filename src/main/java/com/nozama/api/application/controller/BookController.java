@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.MediaType;
@@ -41,6 +46,9 @@ public class BookController {
 
 	@Autowired
 	private ManageBook manageBookUseCase;
+
+	@Autowired
+  private EntityMapper entityMapper;
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
@@ -69,7 +77,7 @@ public class BookController {
 			.findById(payload.getPublisherId())
 			.orElseThrow(() -> new EntityNotFoundException("Publisher with id " + payload.getPublisherId() + " was not found."));
 
-		Book book = EntityMapper.mapEntity(payload, Book.class);
+		Book book = entityMapper.mapEntity(payload, Book.class);
 
 		book.setCategories(categories);
 		book.setAuthors(authors);
@@ -78,7 +86,7 @@ public class BookController {
 
 		book = manageBookUseCase.create(book);
 
-		BookResponse response = EntityMapper.mapEntity(book, BookResponse.class).setLinks();
+		BookResponse response = entityMapper.mapEntity(book, BookResponse.class).setLinks();
 
 		URI uri = response.getRequiredLink(IanaLinkRelations.SELF).toUri();
 
@@ -89,7 +97,7 @@ public class BookController {
 	@Operation(summary = "Finds an book", description = "Finds an book by its Id.", tags = { "Book" })
 	public ResponseEntity<BookResponse> findById(@PathVariable(value = "id") Long id) {
 		Book found = manageBookUseCase.findById(id);
-		BookResponse response = EntityMapper.mapEntity(found, BookResponse.class).setLinks();
+		BookResponse response = entityMapper.mapEntity(found, BookResponse.class).setLinks();
 
 		return ResponseEntity.ok(response);
 	}
@@ -99,7 +107,7 @@ public class BookController {
 			"Book" })
 	public ResponseEntity<List<BookResponse>> findAll() {
 		List<Book> found = manageBookUseCase.findAll();
-		List<BookResponse> response = EntityMapper.mapList(found, BookResponse.class).stream().map(a -> a.setLinks())
+		List<BookResponse> response = entityMapper.mapList(found, BookResponse.class).stream().map(a -> a.setLinks())
 				.toList();
 
 		return ResponseEntity.ok(response);
@@ -124,7 +132,7 @@ public class BookController {
 			.findById(payload.getPublisherId())
 			.orElseThrow(() -> new EntityNotFoundException("Publisher with id " + payload.getPublisherId() + " was not found."));
 		
-		Book book = EntityMapper.mapEntity(payload, Book.class);
+		Book book = entityMapper.mapEntity(payload, Book.class);
 		
 		book.setCategories(categories);
 		book.setAuthors(authors);
@@ -133,7 +141,7 @@ public class BookController {
 
 		book = manageBookUseCase.update(book);
 
-		BookResponse response = EntityMapper.mapEntity(book, BookResponse.class).setLinks();
+		BookResponse response = entityMapper.mapEntity(book, BookResponse.class).setLinks();
 
 		return ResponseEntity.ok(response);
 	}
