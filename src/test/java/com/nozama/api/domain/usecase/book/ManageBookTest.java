@@ -1,7 +1,7 @@
 package com.nozama.api.domain.usecase.book;
 
 import com.nozama.api.application.controller.CategoryController;
-import com.nozama.api.application.dto.request.BookRequest;
+import com.nozama.api.application.dto.request.book.BookCreateRequest;
 import com.nozama.api.domain.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

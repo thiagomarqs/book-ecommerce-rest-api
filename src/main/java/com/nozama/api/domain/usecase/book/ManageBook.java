@@ -59,6 +59,7 @@ public class ManageBook {
 			book.setActive(old.getActive());
 		}
 		
+		book.setSku(old.getSku());
 		book.setCreatedAt(old.getCreatedAt());
 		
 		return repository.save(book);

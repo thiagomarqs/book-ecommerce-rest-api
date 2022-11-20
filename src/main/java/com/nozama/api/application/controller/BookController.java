@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nozama.api.application.dto.request.BookRequest;
+import com.nozama.api.application.dto.request.book.BookCreateRequest;
+import com.nozama.api.application.dto.request.book.BookUpdateRequest;
 import com.nozama.api.application.dto.response.BookResponse;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;
@@ -56,7 +57,7 @@ public class BookController {
 
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Creates an book", description = "Creates an book based on the request's body payload.", tags = { "Book" })
-	public ResponseEntity<BookResponse> create(@RequestBody BookRequest payload) {
+	public ResponseEntity<BookResponse> create(@RequestBody BookCreateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId().stream()
 			.map(id -> categoryRepository.findById(id)
@@ -111,7 +112,7 @@ public class BookController {
 	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Updates an book by its id", description = "Finds an book by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", tags = {
 			"Book" })
-	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookRequest payload) {
+	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookUpdateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId().stream()
 			.map(category -> categoryRepository.findById(category)

@@ -1,4 +1,4 @@
-package com.nozama.api.application.dto.request;
+package com.nozama.api.application.dto.request.book;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -8,7 +8,7 @@ import com.nozama.api.domain.enums.Language;
 import com.nozama.api.domain.vo.BookDimensions;
 import com.nozama.api.domain.vo.Price;
 
-public class BookRequest {
+public class BookCreateRequest {
 
 	private String sku;
 	private String title;
@@ -26,9 +26,9 @@ public class BookRequest {
 	private BookDimensions dimensions;
 	private Integer availableQuantity;
 	
-	public BookRequest() {
+	public BookCreateRequest() {
 	}
-	public BookRequest(String sku, String title, String description, String imageUrl, Price price,
+	public BookCreateRequest(String sku, String title, String description, String imageUrl, Price price,
 			Set<Long> authorsId, Set<Long> categoriesId, Format format, Integer pages, Language language,
 			Long publisherId, LocalDate publishingDate, String isbn, BookDimensions dimensions,
 			Integer availableQuantity) {
