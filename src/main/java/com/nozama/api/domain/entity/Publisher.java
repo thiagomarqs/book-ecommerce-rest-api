@@ -1,4 +1,4 @@
-package com.nozama.api.domain.entities;
+package com.nozama.api.domain.entity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,7 @@
 package com.nozama.api.domain.vo;
 
+import com.nozama.api.domain.enums.Currency;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -19,7 +21,8 @@ public class Price {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Currency currency;
-	
+
+	public Price() {}
 	public Price(BigDecimal amount, Currency currency) {
 		this.price = amount;
 		this.currency = currency;

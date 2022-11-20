@@ -1,10 +1,11 @@
-package com.nozama.api.domain.entities;
+package com.nozama.api.domain.entity;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -44,27 +45,28 @@ public class Book {
 	@NotBlank(message="The book's SKU is required.")
 	private String sku;
 	
-	@Max(value=255, message="The book's title must not be longer than 255 characters.")
+	@Size(max=255, message="The book's title must not be longer than 255 characters.")
 	@NotBlank(message="The book's title is required.")
 	private String title;
 	
-	@Max(value=1000, message="The book's description must not be longer than 1000 characters.")
+	@Size(max=1000, message="The book's description must not be longer than 1000 characters.")
 	@NotBlank(message="The book's description is required.")
 	private String description;
 	
-	@Max(value=1000, message="The book's image URL must not be longer than 1000 characters.")
+	@Size(max=1000, message="The book's image URL must not be longer than 1000 characters.")
 	@URL(message="The book's image URL is not valid.")
+	@NotBlank(message="The book's image URL is required.")
 	private String imageUrl;
 	
 	@NotNull(message="The book's price is required.")
 	@Embedded
 	private Price price;
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 		name = "book_author",
 		joinColumns = { @JoinColumn(name = "book_id") }, 
-        inverseJoinColumns = { @JoinColumn(name = "author_id") }
+        inverseJoinColumns = { @JoinColumn(name = "author_id")}
 	)
 	private Set<Author> authors = new HashSet<>();
 	
@@ -82,6 +84,7 @@ public class Book {
 	
 	@Min(value = 1, message="A valid number of pages is required.")
 	@Digits(integer=5, fraction=0, message="A valid number of pages is required.")
+	@NotNull(message="The books's number of pages is required.")
 	private Integer pages;
 	
 	@NotNull(message="The book's language is required.")
@@ -97,6 +100,7 @@ public class Book {
 	private LocalDate publishingDate;
 	
 	@ISBN(type = Type.ISBN_13, message="The informed ISBN does not follow the ISBN-13 format.")
+	@NotBlank(message="The books's ISBN is required.")
 	private String isbn;
 	
 	@NotNull(message="The book's dimensions are required.")
@@ -105,6 +109,7 @@ public class Book {
 	
 	@Min(value = 1, message="The informed quantity is not valid.")
 	@Digits(integer=6, fraction=0, message="The informed quantity is not valid.")
+	@NotNull(message="The books's available quantity is required.")
 	private Integer availableQuantity;
 	
 	@NotNull(message="The book's creation date is required.")

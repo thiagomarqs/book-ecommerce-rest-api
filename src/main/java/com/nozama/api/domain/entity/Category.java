@@ -1,4 +1,4 @@
-package com.nozama.api.domain.entities;
+package com.nozama.api.domain.entity;
 
 import java.util.Objects;
 
@@ -10,22 +10,27 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Author {
+public class Category {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Size(max=255, message="The author's name must be no longer than 255 characters.")
-	@NotBlank(message="The author's name must be informed.")
+	@Size(max=100, message="The category's name must be no longer than 100 characters.")
+	@NotBlank(message="The category's name must be informed.")
 	private String name;
 	
-	public Author() {}
-	public Author(Long id, String name) {
+	@Size(max=255, message="The category's description must be no longer than 255 characters.")
+	@NotBlank(message="The category must have a description.")
+	private String description;
+	
+	public Category() {}
+	public Category(Long id, String name, String description) {
 		this.id = id;
 		this.name = name;
+		this.description = description;
 	}
-	
+		
 	public Long getId() {
 		return id;
 	}
@@ -37,6 +42,12 @@ public class Author {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	@Override
@@ -51,7 +62,7 @@ public class Author {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Author other = (Author) obj;
+		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
 	}
 

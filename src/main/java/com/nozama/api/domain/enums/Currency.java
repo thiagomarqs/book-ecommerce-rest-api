@@ -1,4 +1,4 @@
-package com.nozama.api.domain.vo;
+package com.nozama.api.domain.enums;
 
 public enum Currency {
 	BRL,
