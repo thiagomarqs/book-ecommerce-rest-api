@@ -17,8 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -60,6 +60,7 @@ public class Book {
 	
 	@NotNull(message="The book's price is required.")
 	@Embedded
+	@Valid
 	private Price price;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
