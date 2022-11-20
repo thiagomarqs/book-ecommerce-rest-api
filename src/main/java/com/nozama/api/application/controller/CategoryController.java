@@ -37,8 +37,8 @@ public class CategoryController {
     private ManageCategory manageCategoryUseCase;
 
 	@PostMapping(
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     @Operation(
         summary = "Creates an category",
@@ -61,7 +61,7 @@ public class CategoryController {
 
     @GetMapping(
 		value = "/{id}",
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Finds an category",
@@ -78,7 +78,7 @@ public class CategoryController {
     }
 
     @GetMapping(
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Finds all categories",
@@ -97,8 +97,8 @@ public class CategoryController {
 
     @PutMapping(
 		value = "/{id}",
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Updates an category by its id",

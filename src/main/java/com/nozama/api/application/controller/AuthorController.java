@@ -37,8 +37,8 @@ public class AuthorController {
     private ManageAuthor manageAuthorUseCase;
 
     @PostMapping(
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     @Operation(
         summary = "Creates an author",
@@ -61,7 +61,7 @@ public class AuthorController {
 
     @GetMapping(
 		value = "/{id}",
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
 	)
     @Operation(
         summary = "Finds an author",
@@ -78,7 +78,7 @@ public class AuthorController {
     }
 
     @GetMapping(
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Finds all authors",
@@ -97,8 +97,8 @@ public class AuthorController {
 
     @PutMapping(
 		value = "/{id}",
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Updates an author by their id",

@@ -51,7 +51,7 @@ public class BookController {
 	@Autowired
 	private PublisherRepository publisherRepository;
 
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Creates an book", description = "Creates an book based on the request's body payload.", tags = { "Book" })
 	public ResponseEntity<BookResponse> create(@RequestBody BookRequest payload) {
 		
@@ -85,7 +85,7 @@ public class BookController {
 		return ResponseEntity.created(uri).body(response);
 	}
 
-	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Finds an book", description = "Finds an book by its Id.", tags = { "Book" })
 	public ResponseEntity<BookResponse> findById(@PathVariable(value = "id") Long id) {
 		Book found = manageBookUseCase.findById(id);
@@ -94,7 +94,7 @@ public class BookController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Finds all books", description = "Finds all books. If no book exists, an empty array will be returned.", tags = {
 			"Book" })
 	public ResponseEntity<List<BookResponse>> findAll() {
@@ -105,8 +105,7 @@ public class BookController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
-			MediaType.APPLICATION_JSON_VALUE })
+	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Updates an book by its id", description = "Finds an book by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", tags = {
 			"Book" })
 	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookRequest payload) {

@@ -37,8 +37,8 @@ public class PublisherController {
     private ManagePublisher managePublisherUseCase;
 
 	@PostMapping(
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     @Operation(
         summary = "Creates an publisher",
@@ -61,7 +61,7 @@ public class PublisherController {
 
 	@GetMapping(
 		value = "/{id}",
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Finds an publisher",
@@ -78,7 +78,7 @@ public class PublisherController {
     }
 
 	@GetMapping(
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Finds all publishers",
@@ -97,8 +97,8 @@ public class PublisherController {
 
 	@PutMapping(
 		value = "/{id}",
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
 	)
     @Operation(
         summary = "Updates an publisher by their id",
