@@ -1,6 +1,7 @@
 package com.nozama.api.application.dto.request.book;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import com.nozama.api.domain.enums.Format;
@@ -12,7 +13,7 @@ public class BookUpdateRequest {
 
 	private String title;
 	private String description;
-	private String imageUrl;
+	private List<String> imagesUrl;
 	private Price price;
 	private Set<Long> authorsId;
 	private Set<Long> categoriesId;
@@ -24,16 +25,17 @@ public class BookUpdateRequest {
 	private String isbn;
 	private BookDimensions dimensions;
 	private Integer availableQuantity;
-	
+
 	public BookUpdateRequest() {
 	}
-	public BookUpdateRequest(String title, String description, String imageUrl, Price price,
+
+	public BookUpdateRequest(String title, String description, List<String> imagesUrl, Price price,
 			Set<Long> authorsId, Set<Long> categoriesId, Format format, Integer pages, Language language,
 			Long publisherId, LocalDate publishingDate, String isbn, BookDimensions dimensions,
 			Integer availableQuantity) {
 		this.title = title;
 		this.description = description;
-		this.imageUrl = imageUrl;
+		this.imagesUrl = imagesUrl;
 		this.price = price;
 		this.authorsId = authorsId;
 		this.categoriesId = categoriesId;
@@ -63,12 +65,12 @@ public class BookUpdateRequest {
 		this.description = description;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public List<String> getImagesUrl() {
+		return imagesUrl;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImagesUrl(List<String> imagesUrl) {
+		this.imagesUrl = imagesUrl;
 	}
 
 	public Price getPrice() {
@@ -158,6 +160,5 @@ public class BookUpdateRequest {
 	public void setAvailableQuantity(Integer availableQuantity) {
 		this.availableQuantity = availableQuantity;
 	}
-
 
 }

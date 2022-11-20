@@ -1,6 +1,7 @@
 package com.nozama.api.application.dto.request.book;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import com.nozama.api.domain.enums.Format;
@@ -13,7 +14,7 @@ public class BookCreateRequest {
 	private String sku;
 	private String title;
 	private String description;
-	private String imageUrl;
+	private List<String> imagesUrl;
 	private Price price;
 	private Set<Long> authorsId;
 	private Set<Long> categoriesId;
@@ -28,14 +29,13 @@ public class BookCreateRequest {
 	
 	public BookCreateRequest() {
 	}
-	public BookCreateRequest(String sku, String title, String description, String imageUrl, Price price,
-			Set<Long> authorsId, Set<Long> categoriesId, Format format, Integer pages, Language language,
-			Long publisherId, LocalDate publishingDate, String isbn, BookDimensions dimensions,
-			Integer availableQuantity) {
+	public BookCreateRequest(String sku, String title, String description, List<String> imagesUrl, Price price,
+			Set<Long> authorsId, Set<Long> categoriesId, Format format, Integer pages, Language language, Long publisherId,
+			LocalDate publishingDate, String isbn, BookDimensions dimensions, Integer availableQuantity) {
 		this.sku = sku;
 		this.title = title;
 		this.description = description;
-		this.imageUrl = imageUrl;
+		this.imagesUrl = imagesUrl;
 		this.price = price;
 		this.authorsId = authorsId;
 		this.categoriesId = categoriesId;
@@ -52,122 +52,92 @@ public class BookCreateRequest {
 	public String getSku() {
 		return sku;
 	}
-
 	public void setSku(String sku) {
 		this.sku = sku;
 	}
-
 	public String getTitle() {
 		return title;
 	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 	public String getDescription() {
 		return description;
 	}
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public String getImageUrl() {
-		return imageUrl;
+	public List<String> getImagesUrl() {
+		return imagesUrl;
 	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImagesUrl(List<String> imagesUrl) {
+		this.imagesUrl = imagesUrl;
 	}
-
 	public Price getPrice() {
 		return price;
 	}
-
 	public void setPrice(Price price) {
 		this.price = price;
 	}
-
 	public Set<Long> getAuthorsId() {
 		return authorsId;
 	}
-
 	public void setAuthorsId(Set<Long> authorsId) {
 		this.authorsId = authorsId;
 	}
-
 	public Set<Long> getCategoriesId() {
 		return categoriesId;
 	}
-
 	public void setCategoriesId(Set<Long> categoriesId) {
 		this.categoriesId = categoriesId;
 	}
-
 	public Format getFormat() {
 		return format;
 	}
-
 	public void setFormat(Format format) {
 		this.format = format;
 	}
-
 	public Integer getPages() {
 		return pages;
 	}
-
 	public void setPages(Integer pages) {
 		this.pages = pages;
 	}
-
 	public Language getLanguage() {
 		return language;
 	}
-
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
-
 	public Long getPublisherId() {
 		return publisherId;
 	}
-
 	public void setPublisherId(Long publisherId) {
 		this.publisherId = publisherId;
 	}
-
 	public LocalDate getPublishingDate() {
 		return publishingDate;
 	}
-
 	public void setPublishingDate(LocalDate publishingDate) {
 		this.publishingDate = publishingDate;
 	}
-
 	public String getIsbn() {
 		return isbn;
 	}
-
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
-
 	public BookDimensions getDimensions() {
 		return dimensions;
 	}
-
 	public void setDimensions(BookDimensions dimensions) {
 		this.dimensions = dimensions;
 	}
-
 	public Integer getAvailableQuantity() {
 		return availableQuantity;
 	}
-
 	public void setAvailableQuantity(Integer availableQuantity) {
 		this.availableQuantity = availableQuantity;
 	}
-
 
 }

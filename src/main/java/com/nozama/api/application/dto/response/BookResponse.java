@@ -4,6 +4,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class BookResponse extends EntityModel<BookResponse> {
 	private String sku;
 	private String title;
 	private String description;
-	private String imageUrl;
+	private List<String> imagesUrl;
 	private Price price;
 	private Set<AuthorResponse> authors;
 	private Set<CategoryResponse> categories;
@@ -39,7 +40,7 @@ public class BookResponse extends EntityModel<BookResponse> {
 	
 	public BookResponse() {
 	}
-	public BookResponse(Long id, String sku, String title, String description, String imageUrl, Price price,
+	public BookResponse(Long id, String sku, String title, String description, List<String> imagesUrl, Price price,
 			Set<AuthorResponse> authors, Set<CategoryResponse> categories, Format format, Integer pages,
 			Language language, PublisherResponse publisher, LocalDate publishingDate, String isbn,
 			BookDimensions dimensions, Integer availableQuantity, LocalDate createdAt, Boolean active) {
@@ -47,7 +48,7 @@ public class BookResponse extends EntityModel<BookResponse> {
 		this.sku = sku;
 		this.title = title;
 		this.description = description;
-		this.imageUrl = imageUrl;
+		this.imagesUrl = imagesUrl;
 		this.price = price;
 		this.authors = authors;
 		this.categories = categories;
@@ -104,11 +105,11 @@ public class BookResponse extends EntityModel<BookResponse> {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getImageUrl() {
-		return imageUrl;
+	public List<String> getImagesUrl() {
+		return imagesUrl;
 	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImagesUrl(List<String> imagesUrl) {
+		this.imagesUrl = imagesUrl;
 	}
 	public Price getPrice() {
 		return price;
