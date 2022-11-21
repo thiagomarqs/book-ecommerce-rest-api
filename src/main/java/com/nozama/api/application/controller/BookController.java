@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nozama.api.application.dto.request.book.BookActiveStatusRequest;
 import com.nozama.api.application.dto.request.book.BookCreateRequest;
 import com.nozama.api.application.dto.request.book.BookUpdateRequest;
 import com.nozama.api.application.dto.response.BookResponse;
@@ -31,6 +32,7 @@ import com.nozama.api.domain.repository.AuthorRepository;
 import com.nozama.api.domain.repository.CategoryRepository;
 import com.nozama.api.domain.repository.PublisherRepository;
 import com.nozama.api.domain.usecase.book.ManageBook;
+import com.nozama.api.domain.usecase.book.ManageBookActiveStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,6 +44,9 @@ public class BookController {
 
 	@Autowired
 	private ManageBook manageBookUseCase;
+
+	@Autowired
+	private ManageBookActiveStatus manageBookActiveStatusUseCase;
 
 	@Autowired
   private EntityMapper entityMapper;
@@ -61,12 +66,12 @@ public class BookController {
 		
 		Set<Category> categories = payload.getCategoriesId().stream()
 			.map(id -> categoryRepository.findById(id)
-					.orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found.")))
+			.orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found.")))
 			.collect(Collectors.toSet());
 
 		Set<Author> authors = payload.getAuthorsId().stream()
 			.map(id -> authorRepository.findById(id)
-					.orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found.")))
+			.orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found.")))
 			.collect(Collectors.toSet());
 
 		Publisher publisher = publisherRepository
@@ -147,6 +152,13 @@ public class BookController {
 			"Book" })
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		manageBookUseCase.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping(value = "/{id}/active")
+	public ResponseEntity<?> active(@PathVariable("id") Long id, @RequestBody BookActiveStatusRequest payload) {
+		Boolean active = payload.getActive();
+		manageBookActiveStatusUseCase.setActive(id, active);
 		return ResponseEntity.noContent().build();
 	}
 
