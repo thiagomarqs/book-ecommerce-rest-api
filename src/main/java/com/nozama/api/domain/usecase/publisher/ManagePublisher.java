@@ -18,6 +18,7 @@ public class ManagePublisher {
 	
 	public Publisher create(Publisher publisher) {
 		if(publisher.equals(null)) throw new InvalidEntityException("No publisher was informed.");
+		if(repository.existsByName(publisher.getName())) throw new InvalidEntityException(String.format("There's already a publisher with the name '%s'", publisher.getName()));
 		
 		return repository.save(publisher);
 	}

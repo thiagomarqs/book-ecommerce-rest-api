@@ -18,7 +18,7 @@ public class ManageCategory {
 	
 	public Category create(Category category) {
 		if(category.equals(null)) throw new InvalidEntityException("No category was informed.");
-		if(repository.existsByName(category.getName())) throw new InvalidEntityException("No category was informed.");
+		if(repository.existsByName(category.getName())) throw new InvalidEntityException(String.format("There's already a category with the name '%s'", category.getName()));
 		
 		return repository.save(category);
 	}
