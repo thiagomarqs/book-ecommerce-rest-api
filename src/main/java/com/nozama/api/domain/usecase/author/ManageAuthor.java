@@ -18,7 +18,8 @@ public class ManageAuthor {
 	
 	public Author create(Author author) {
 		if(author.equals(null)) throw new InvalidEntityException("No author was informed.");
-		
+		if(repository.existsByName(author.getName())) throw new InvalidEntityException(String.format("There's already an author with the name '%s'.", author.getName()));
+
 		return repository.save(author);
 	}
 	

@@ -6,4 +6,5 @@ import com.nozama.api.domain.entity.Author;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
+    Boolean existsByName(String name);
 }
