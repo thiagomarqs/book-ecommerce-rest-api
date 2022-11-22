@@ -1,5 +1,8 @@
 package com.nozama.api.domain.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +13,14 @@ import org.springframework.data.repository.query.Param;
 import com.nozama.api.domain.entity.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+  @Override
+  @Query(value = "SELECT b FROM Book b WHERE b.active = true and b.id = :id")
+  Optional<Book> findById(@Param("id") Long id);
+  
+  @Override
+  @Query(value = "SELECT b FROM Book b WHERE b.active = true")
+  List<Book> findAll();
 
   Boolean existsBySku(String sku);
 
