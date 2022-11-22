@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.nozama.api.domain.entity.Category;
-import com.nozama.api.domain.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 

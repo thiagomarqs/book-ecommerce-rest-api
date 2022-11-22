@@ -20,6 +20,8 @@ public class ManagePublisher {
 		if(publisher.equals(null)) throw new InvalidEntityException("No publisher was informed.");
 		if(repository.existsByName(publisher.getName())) throw new InvalidEntityException(String.format("There's already a publisher with the name '%s'", publisher.getName()));
 		
+		publisher.setActive(true);
+
 		return repository.save(publisher);
 	}
 	
@@ -28,7 +30,7 @@ public class ManagePublisher {
 		
 		return repository
 			.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Publisher with id " + id + " was not found."));
+			.orElseThrow(() -> new EntityNotFoundException("Publisher with id " + id + " was not found."));
 	}
 	
 	public List<Publisher> findAll() {

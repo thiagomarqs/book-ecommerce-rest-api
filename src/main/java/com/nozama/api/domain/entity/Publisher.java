@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -30,6 +31,7 @@ public class Publisher {
 	@OneToMany(mappedBy="publisher", cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Book> books = new ArrayList<>();
 
+	@NotNull
 	private Boolean active;
 	
 	public Publisher() {}

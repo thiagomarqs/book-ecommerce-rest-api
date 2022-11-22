@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.MediaType;
@@ -22,6 +24,7 @@ import com.nozama.api.application.dto.request.book.BookActiveStatusRequest;
 import com.nozama.api.application.dto.request.book.BookCreateRequest;
 import com.nozama.api.application.dto.request.book.BookUpdateRequest;
 import com.nozama.api.application.dto.response.BookResponse;
+import com.nozama.api.application.mapper.BookMapper;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;
 import com.nozama.api.domain.entity.Book;
@@ -50,7 +53,7 @@ public class BookController {
 
 	@Autowired
   private EntityMapper entityMapper;
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
@@ -59,6 +62,17 @@ public class BookController {
 	
 	@Autowired
 	private PublisherRepository publisherRepository;
+	
+	@Autowired
+	private BookMapper bookMapper;
+
+	@PostConstruct
+	private void initialize() {
+		bookMapper
+			.getMapper()
+			.createTypeMap(BookCreateRequest.class, Book.class)
+			.addMappings(mapper -> mapper.skip(Book::setId));
+	}
 
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Creates an book", description = "Creates an book based on the request's body payload.", tags = { "Book" })
@@ -78,12 +92,11 @@ public class BookController {
 			.findById(payload.getPublisherId())
 			.orElseThrow(() -> new EntityNotFoundException("Publisher with id " + payload.getPublisherId() + " was not found."));
 
-		Book book = entityMapper.mapEntity(payload, Book.class);
+		Book book = bookMapper.toBook(payload);
 
 		book.setCategories(categories);
 		book.setAuthors(authors);
 		book.setPublisher(publisher);
-		book.setActive(true);
 
 		book = manageBookUseCase.create(book);
 

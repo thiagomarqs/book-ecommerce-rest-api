@@ -31,6 +31,7 @@ public class ManageBook {
 			throw new InvalidEntityException(String.format("A book with the ISBN '%s' already exists.", book.getIsbn()));
 		};
 
+		book.setActive(true);
 		book.setCreatedAt(LocalDate.now());
 		
 		return repository.save(book);

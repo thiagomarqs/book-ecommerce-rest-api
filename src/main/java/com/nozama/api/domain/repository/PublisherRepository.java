@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.nozama.api.domain.entity.Publisher;
-import com.nozama.api.domain.entity.Publisher;
 
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
 

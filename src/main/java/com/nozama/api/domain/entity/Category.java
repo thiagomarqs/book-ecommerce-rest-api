@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -23,12 +24,16 @@ public class Category {
 	@Size(max=255, message="The category's description must be no longer than 255 characters.")
 	@NotBlank(message="The category must have a description.")
 	private String description;
+
+	@NotNull
+	private Boolean active;
 	
 	public Category() {}
-	public Category(Long id, String name, String description) {
+	public Category(Long id, String name, String description, Boolean active) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.active = active;
 	}
 		
 	public Long getId() {
@@ -48,6 +53,12 @@ public class Category {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 	
 	@Override
