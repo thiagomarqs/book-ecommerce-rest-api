@@ -1,13 +1,13 @@
 package com.nozama.api.domain.usecase.book;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Book;
 import com.nozama.api.domain.exception.EntityNotFoundException;
 import com.nozama.api.domain.repository.BookRepository;
 
-@Service
+@Component
 public class ManageBookActiveStatus {
   
   @Autowired
