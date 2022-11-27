@@ -30,6 +30,11 @@ public class ManageBookTest {
   private ManageBook manageBook;
 
   @Test
+  void Given_NullBook_When_CreatingNewBook_Expect_ThrowException() {
+    assertThrows(InvalidEntityException.class, () -> manageBook.create(null));
+  }
+
+  @Test
   void When_CreatingNewBook_Expect_BookToBeActive() {
     Book book = new Book();
 
@@ -70,6 +75,22 @@ public class ManageBookTest {
   }
 
   @Test
+  void Given_NullId_When_FindingById_Expect_ThrowException() {
+    assertThrows(IllegalArgumentException.class, () -> manageBook.findById(null));
+  }
+
+  @Test
+  void Given_NoBookWithTheInformedId_When_FindingById_Expect_ThrowException() {
+    when(repository.findById(1L)).thenReturn(Optional.empty());
+    assertThrows(EntityNotFoundException.class, () -> manageBook.findById(1L));
+  }
+
+  @Test
+  void Given_NullId_When_UpdatingBook_Expect_ThrowException() {
+    assertThrows(InvalidEntityException.class, () -> manageBook.update(null));
+  }
+
+  @Test
   void Given_NoBookWithTheInformedId_When_UpdatingBook_Then_ThrowException() {
     Book book = new Book();
     book.setId(1L);
@@ -79,6 +100,10 @@ public class ManageBookTest {
     assertThrows(EntityNotFoundException.class, () -> manageBook.update(book));
   }
 
+  @Test
+  void Given_NullId_When_DeletingBook_Expect_ThrowException() {
+    assertThrows(IllegalArgumentException.class, () -> manageBook.delete(null));
+  }
 
   @Test
   void Given_NoBookWithTheInformedId_When_DeletingBook_Then_ThrowException() {

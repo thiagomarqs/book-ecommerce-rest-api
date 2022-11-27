@@ -21,7 +21,7 @@ public class ManageBook {
 	
 	public Book create(Book book) {
 
-		if(book.equals(null)) { 
+		if(book == null) { 
 			throw new InvalidEntityException("No book was informed.");
 		}
 		
@@ -40,7 +40,7 @@ public class ManageBook {
 	}
 	
 	public Book findById(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		
 		return repository
 			.findById(id)
@@ -52,7 +52,7 @@ public class ManageBook {
 	}
 	
 	public Book update(Book book) {
-		if(book.equals(null)) throw new InvalidEntityException("No book was informed.");
+		if(book == null) throw new InvalidEntityException("No book was informed.");
 
 		Book old = repository
 			.findById(book.getId())
@@ -69,7 +69,7 @@ public class ManageBook {
 	}
 	
 	public void delete(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		if(!repository.existsById(id)) throw new EntityNotFoundException("Book with id " + id + " was not found.");
 
 		repository.deleteById(id);
