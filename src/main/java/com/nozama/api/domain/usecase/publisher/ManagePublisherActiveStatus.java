@@ -1,6 +1,5 @@
 package com.nozama.api.domain.usecase.publisher;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Publisher;
@@ -11,11 +10,14 @@ import com.nozama.api.domain.repository.PublisherRepository;
 @Component
 public class ManagePublisherActiveStatus {
   
-  @Autowired
-  private PublisherRepository repository;
+  private final PublisherRepository repository;
 
-  @Autowired
-  private BookRepository bookRepository;
+  private final BookRepository bookRepository;
+
+  public ManagePublisherActiveStatus(PublisherRepository repository, BookRepository bookRepository) {
+    this.repository = repository;
+    this.bookRepository = bookRepository;
+  }
 
   public void setActive(Long id, Boolean active) {
     

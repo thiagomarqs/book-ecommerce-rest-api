@@ -2,7 +2,6 @@ package com.nozama.api.domain.usecase.publisher;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Publisher;
@@ -13,9 +12,12 @@ import com.nozama.api.domain.repository.PublisherRepository;
 @Component
 public class ManagePublisher {
 	
-	@Autowired
-	private PublisherRepository repository;
+	private final PublisherRepository repository;
 	
+	public ManagePublisher(PublisherRepository repository) {
+		this.repository = repository;
+	}
+
 	public Publisher create(Publisher publisher) {
 		if(publisher.equals(null)) throw new InvalidEntityException("No publisher was informed.");
 		if(repository.existsByName(publisher.getName())) throw new InvalidEntityException(String.format("There's already a publisher with the name '%s'", publisher.getName()));

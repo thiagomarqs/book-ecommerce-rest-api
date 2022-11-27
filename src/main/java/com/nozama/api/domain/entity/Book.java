@@ -273,5 +273,14 @@ public class Book {
 		Book other = (Book) obj;
 		return Objects.equals(id, other.id);
 	}
-		
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", sku=" + sku + ", title=" + title + ", description=" + description + ", imagesUrl="
+				+ imagesUrl + ", price=" + price + ", authors=" + authors + ", categories=" + categories + ", format=" + format
+				+ ", pages=" + pages + ", language=" + language + ", publisher=" + publisher + ", publishingDate="
+				+ publishingDate + ", isbn=" + isbn + ", dimensions=" + dimensions + ", availableQuantity=" + availableQuantity
+				+ ", createdAt=" + createdAt + ", active=" + active + "]";
+	}
+	
 }

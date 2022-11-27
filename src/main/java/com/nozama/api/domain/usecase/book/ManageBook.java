@@ -3,7 +3,6 @@ package com.nozama.api.domain.usecase.book;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Book;
@@ -14,8 +13,11 @@ import com.nozama.api.domain.repository.BookRepository;
 @Component
 public class ManageBook {
 	
-	@Autowired
-	private BookRepository repository;
+	private final BookRepository repository;
+
+	public ManageBook(BookRepository repository) {
+		this.repository = repository;
+	}
 	
 	public Book create(Book book) {
 

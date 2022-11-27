@@ -1,5 +1,3 @@
-cors:
-  allowed-origins: *
 hibernate:
   physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 spring:

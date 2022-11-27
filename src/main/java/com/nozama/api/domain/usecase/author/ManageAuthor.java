@@ -2,7 +2,6 @@ package com.nozama.api.domain.usecase.author;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Author;
@@ -13,9 +12,12 @@ import com.nozama.api.domain.repository.AuthorRepository;
 @Component
 public class ManageAuthor {
 	
-	@Autowired
-	private AuthorRepository repository;
+	private final AuthorRepository repository;
 	
+	public ManageAuthor(AuthorRepository repository) {
+		this.repository = repository;
+	}
+
 	public Author create(Author author) {
 		if(author.equals(null)) throw new InvalidEntityException("No author was informed.");
 		if(repository.existsByName(author.getName())) throw new InvalidEntityException(String.format("There's already an author with the name '%s'.", author.getName()));

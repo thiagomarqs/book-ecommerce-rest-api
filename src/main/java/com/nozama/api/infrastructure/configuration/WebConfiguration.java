@@ -32,7 +32,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {    
       registry
         .addMapping("/api/**")
-        .allowedOrigins(corsAllowedOrigins)
+        .allowedOriginPatterns(corsAllowedOrigins)
         .allowedMethods("*")
         .allowCredentials(true);
     }
