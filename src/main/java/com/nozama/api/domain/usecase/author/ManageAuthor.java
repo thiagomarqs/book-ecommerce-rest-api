@@ -19,14 +19,14 @@ public class ManageAuthor {
 	}
 
 	public Author create(Author author) {
-		if(author.equals(null)) throw new InvalidEntityException("No author was informed.");
+		if(author == null) throw new InvalidEntityException("No author was informed.");
 		if(repository.existsByName(author.getName())) throw new InvalidEntityException(String.format("There's already an author with the name '%s'.", author.getName()));
 
 		return repository.save(author);
 	}
 	
 	public Author findById(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		
 		return repository
 			.findById(id)
@@ -38,14 +38,14 @@ public class ManageAuthor {
 	}
 	
 	public Author update(Author author) {
-		if(author.equals(null)) throw new InvalidEntityException("No author was informed.");
+		if(author == null) throw new InvalidEntityException("No author was informed.");
 		if(!repository.existsById(author.getId())) throw new EntityNotFoundException("Author with id " + author.getId() + " was not found.");
 		
 		return repository.save(author);
 	}
 	
 	public void delete(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		if(!repository.existsById(id)) throw new EntityNotFoundException("Author with id " + id + " was not found.");
 
 		repository.deleteById(id);
