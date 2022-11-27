@@ -29,13 +29,13 @@ public class ManagePublisherActiveStatus {
     else inactivate(publisher);
   }
 
-  public void activate(Publisher publisher) {
+  private void activate(Publisher publisher) {
     bookRepository.activateByPublisherId(publisher.getId());
     publisher.setActive(true);
     repository.save(publisher);
   }
 
-  public void inactivate(Publisher publisher) {
+  private void inactivate(Publisher publisher) {
     bookRepository.inactivateByPublisherId(publisher.getId());
     publisher.setActive(false);
     repository.save(publisher);

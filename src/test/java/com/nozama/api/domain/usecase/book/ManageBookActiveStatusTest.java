@@ -29,7 +29,6 @@ public class ManageBookActiveStatusTest {
     Book book = new Book();
     book.setId(1L);
     book.setActive(true);
-    bookRepository.save(book);
     
     when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
     manageBookActiveStatus.setActive(1L, false);
@@ -42,7 +41,6 @@ public class ManageBookActiveStatusTest {
     Book book = new Book();
     book.setId(1L);
     book.setActive(false);
-    bookRepository.save(book);
     
     when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
     manageBookActiveStatus.setActive(1L, true);
