@@ -30,7 +30,7 @@ public class ManageAuthor {
 		
 		return repository
 			.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found."));
+			.orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found."));
 	}
 	
 	public List<Author> findAll() {

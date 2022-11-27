@@ -32,7 +32,7 @@ public class ManageCategory {
 		
 		return repository
 			.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found."));
+			.orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found."));
 	}
 	
 	public List<Category> findAll() {
