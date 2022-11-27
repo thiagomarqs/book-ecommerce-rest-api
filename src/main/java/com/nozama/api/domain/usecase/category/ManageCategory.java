@@ -19,7 +19,7 @@ public class ManageCategory {
 	}
 
 	public Category create(Category category) {
-		if(category.equals(null)) throw new InvalidEntityException("No category was informed.");
+		if(category == null) throw new InvalidEntityException("No category was informed.");
 		if(repository.existsByName(category.getName())) throw new InvalidEntityException(String.format("There's already a category with the name '%s'", category.getName()));
 		
 		category.setActive(true);
@@ -28,7 +28,7 @@ public class ManageCategory {
 	}
 	
 	public Category findById(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		
 		return repository
 			.findById(id)
@@ -40,14 +40,14 @@ public class ManageCategory {
 	}
 	
 	public Category update(Category category) {
-		if(category.equals(null)) throw new InvalidEntityException("No category was informed.");
+		if(category == null) throw new InvalidEntityException("No category was informed.");
 		if(!repository.existsById(category.getId())) throw new EntityNotFoundException("Category with id " + category.getId() + " was not found.");
 		
 		return repository.save(category);
 	}
 	
 	public void delete(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		if(!repository.existsById(id)) throw new EntityNotFoundException("Category with id " + id + " was not found.");
 
 		repository.deleteById(id);
