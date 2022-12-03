@@ -78,12 +78,14 @@ public class BookController {
 	@Operation(summary = "Creates an book", description = "Creates an book based on the request's body payload.", tags = { "Book" })
 	public ResponseEntity<BookResponse> create(@RequestBody BookCreateRequest payload) {
 		
-		Set<Category> categories = payload.getCategoriesId().stream()
+		Set<Category> categories = payload.getCategoriesId()
+			.stream()
 			.map(id -> categoryRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found.")))
 			.collect(Collectors.toSet());
 
-		Set<Author> authors = payload.getAuthorsId().stream()
+		Set<Author> authors = payload.getAuthorsId()
+			.stream()
 			.map(id -> authorRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found.")))
 			.collect(Collectors.toSet());

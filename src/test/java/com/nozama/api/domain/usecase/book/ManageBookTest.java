@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +22,7 @@ import com.nozama.api.domain.exception.InvalidEntityException;
 import com.nozama.api.domain.repository.BookRepository;
 
 @ExtendWith(MockitoExtension.class)
+@Tag("Books")
 public class ManageBookTest {
   
   @Mock
