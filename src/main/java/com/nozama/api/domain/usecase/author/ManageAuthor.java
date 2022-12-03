@@ -2,10 +2,12 @@ package com.nozama.api.domain.usecase.author;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Author;
 import com.nozama.api.domain.exception.EntityNotFoundException;
+import com.nozama.api.domain.exception.InvalidArgumentException;
 import com.nozama.api.domain.exception.InvalidEntityException;
 import com.nozama.api.domain.repository.AuthorRepository;
 
@@ -14,6 +16,7 @@ public class ManageAuthor {
 	
 	private final AuthorRepository repository;
 	
+	@Autowired
 	public ManageAuthor(AuthorRepository repository) {
 		this.repository = repository;
 	}
@@ -45,7 +48,7 @@ public class ManageAuthor {
 	}
 	
 	public void delete(Long id) {
-		if(id == null) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new InvalidArgumentException("No id was informed.");
 		if(!repository.existsById(id)) throw new EntityNotFoundException("Author with id " + id + " was not found.");
 
 		repository.deleteById(id);
