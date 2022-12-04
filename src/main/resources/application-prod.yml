@@ -6,10 +6,10 @@ spring:
     password:
   jpa:
     show-sql: true
-
+  flyway:
+    locations: classpath:db/migration/prod
 server:
   error:
     include-stacktrace: NEVER
-
 cors:
   allowed-origins: "*"

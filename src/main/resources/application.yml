@@ -1,9 +1,10 @@
 spring:
   profiles:
     active: dev
-
+  flyway:
+    enabled: true
+    validate-on-migrate: true
 hibernate:
   physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-
 jpa:
   database-platform: org.hibernate.dialect.H2Dialect

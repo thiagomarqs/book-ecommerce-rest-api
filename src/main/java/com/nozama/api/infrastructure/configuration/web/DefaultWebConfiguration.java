@@ -1,4 +1,4 @@
-package com.nozama.api.infrastructure.configuration;
+package com.nozama.api.infrastructure.configuration.web;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class DefaultWebConfiguration implements WebMvcConfigurer {
 
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {

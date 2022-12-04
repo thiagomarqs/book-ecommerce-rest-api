@@ -1,4 +1,4 @@
-package com.nozama.api.infrastructure.configuration;
+package com.nozama.api.infrastructure.configuration.web;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
