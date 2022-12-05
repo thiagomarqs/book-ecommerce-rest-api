@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nozama.api.application.dto.request.AuthorRequest;
+import com.nozama.api.application.dto.request.author.AuthorRequest;
 import com.nozama.api.application.dto.response.AuthorResponse;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;

@@ -1,4 +1,4 @@
-package com.nozama.api.application.dto.request;
+package com.nozama.api.application.dto.request.publisher;
 
 public class PublisherRequest {
 

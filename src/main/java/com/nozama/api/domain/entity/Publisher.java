@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -29,14 +30,24 @@ public class Publisher {
 	
 	@OneToMany(mappedBy="publisher", cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Book> books = new ArrayList<>();
+
+	@NotNull
+	private Boolean active;
 	
 	public Publisher() {}
-	public Publisher(Long id, String name, String site) {
+	public Publisher(Long id, String name, String site, Boolean active) {
 		this.id = id;
 		this.name = name;
 		this.site = site;
+		this.active = active;
 	}
-	
+
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 	public Long getId() {
 		return id;
 	}

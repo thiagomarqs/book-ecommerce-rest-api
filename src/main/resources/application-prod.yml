@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:devdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+  flyway:
+    locations: classpath:db/migration/prod
+server:
+  error:
+    include-stacktrace: NEVER
+cors:
+  allowed-origins: "*"

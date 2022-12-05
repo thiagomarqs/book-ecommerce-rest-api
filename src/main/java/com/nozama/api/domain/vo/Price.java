@@ -1,21 +1,21 @@
 package com.nozama.api.domain.vo;
 
-import com.nozama.api.domain.enums.Currency;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+
+import com.nozama.api.domain.enums.Currency;
 
 @Embeddable
 public class Price {
 	
 	@NotNull
-	@Positive
+	@Min(value = 1, message = "The price must be at least $1.00")
 	private BigDecimal price;
 	
 	@NotNull

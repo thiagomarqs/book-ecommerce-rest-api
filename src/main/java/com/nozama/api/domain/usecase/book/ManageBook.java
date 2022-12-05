@@ -3,7 +3,6 @@ package com.nozama.api.domain.usecase.book;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Book;
@@ -14,12 +13,15 @@ import com.nozama.api.domain.repository.BookRepository;
 @Component
 public class ManageBook {
 	
-	@Autowired
-	private BookRepository repository;
+	private final BookRepository repository;
+
+	public ManageBook(BookRepository repository) {
+		this.repository = repository;
+	}
 	
 	public Book create(Book book) {
 
-		if(book.equals(null)) { 
+		if(book == null) { 
 			throw new InvalidEntityException("No book was informed.");
 		}
 		
@@ -31,13 +33,14 @@ public class ManageBook {
 			throw new InvalidEntityException(String.format("A book with the ISBN '%s' already exists.", book.getIsbn()));
 		};
 
+		book.setActive(true);
 		book.setCreatedAt(LocalDate.now());
 		
 		return repository.save(book);
 	}
 	
 	public Book findById(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		
 		return repository
 			.findById(id)
@@ -49,7 +52,7 @@ public class ManageBook {
 	}
 	
 	public Book update(Book book) {
-		if(book.equals(null)) throw new InvalidEntityException("No book was informed.");
+		if(book == null) throw new InvalidEntityException("No book was informed.");
 
 		Book old = repository
 			.findById(book.getId())
@@ -59,13 +62,14 @@ public class ManageBook {
 			book.setActive(old.getActive());
 		}
 		
+		book.setSku(old.getSku());
 		book.setCreatedAt(old.getCreatedAt());
 		
 		return repository.save(book);
 	}
 	
 	public void delete(Long id) {
-		if(id.equals(null)) throw new IllegalArgumentException("No id was informed.");
+		if(id == null) throw new IllegalArgumentException("No id was informed.");
 		if(!repository.existsById(id)) throw new EntityNotFoundException("Book with id " + id + " was not found.");
 
 		repository.deleteById(id);

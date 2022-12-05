@@ -2,10 +2,12 @@ package com.nozama.api.domain.entity;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,10 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
@@ -53,20 +56,24 @@ public class Book {
 	@NotBlank(message="The book's description is required.")
 	private String description;
 	
-	@Size(max=1000, message="The book's image URL must not be longer than 1000 characters.")
-	@URL(message="The book's image URL is not valid.")
-	@NotBlank(message="The book's image URL is required.")
-	private String imageUrl;
+	@Size(min=1, max=10, message = "At lease one image URL must be provided.")
+	@ElementCollection
+	private List<
+		@NotEmpty(message = "The image URL must not be empty.")
+		@URL(message = "The image URL must be a valid URL.")
+		String
+	> imagesUrl;
 	
 	@NotNull(message="The book's price is required.")
 	@Embedded
+	@Valid
 	private Price price;
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 		name = "book_author",
 		joinColumns = { @JoinColumn(name = "book_id") }, 
-        inverseJoinColumns = { @JoinColumn(name = "author_id")}
+		inverseJoinColumns = { @JoinColumn(name = "author_id")}
 	)
 	private Set<Author> authors = new HashSet<>();
 	
@@ -74,7 +81,7 @@ public class Book {
 	@JoinTable(
 		name = "book_category",
 		joinColumns = { @JoinColumn(name = "book_id") }, 
-        inverseJoinColumns = { @JoinColumn(name = "category_id") }
+		inverseJoinColumns = { @JoinColumn(name = "category_id") }
 	)
 	private Set<Category> categories = new HashSet<>();
 	
@@ -120,14 +127,14 @@ public class Book {
 	private Boolean active;
 	
 	public Book() {}
-	public Book(Long id, String sku, String title, String description, String imageUrl, Price price, Format format,
+	public Book(Long id, String sku, String title, String description, List<String> imagesUrl, Price price, Format format,
 			Integer pages, Language language, Publisher publisher, LocalDate publishingDate, String isbn,
 			BookDimensions dimensions, Integer availableQuantity, LocalDate createdAt, Boolean active) {
 		this.id = id;
 		this.sku = sku;
 		this.title = title;
 		this.description = description;
-		this.imageUrl = imageUrl;
+		this.imagesUrl = imagesUrl;
 		this.price = price;
 		this.format = format;
 		this.pages = pages;
@@ -165,11 +172,11 @@ public class Book {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getImageUrl() {
-		return imageUrl;
+	public List<String> getImagesUrl() {
+		return imagesUrl;
 	}
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImagesUrl(List<String> imagesUrl) {
+		this.imagesUrl = imagesUrl;
 	}
 	public Price getPrice() {
 		return price;
@@ -266,5 +273,14 @@ public class Book {
 		Book other = (Book) obj;
 		return Objects.equals(id, other.id);
 	}
-		
+
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", sku=" + sku + ", title=" + title + ", description=" + description + ", imagesUrl="
+				+ imagesUrl + ", price=" + price + ", authors=" + authors + ", categories=" + categories + ", format=" + format
+				+ ", pages=" + pages + ", language=" + language + ", publisher=" + publisher + ", publishingDate="
+				+ publishingDate + ", isbn=" + isbn + ", dimensions=" + dimensions + ", availableQuantity=" + availableQuantity
+				+ ", createdAt=" + createdAt + ", active=" + active + "]";
+	}
+	
 }

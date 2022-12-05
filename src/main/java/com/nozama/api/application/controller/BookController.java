@@ -7,9 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.MediaType;
@@ -23,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nozama.api.application.dto.request.BookRequest;
+import com.nozama.api.application.dto.request.book.BookActiveStatusRequest;
+import com.nozama.api.application.dto.request.book.BookCreateRequest;
+import com.nozama.api.application.dto.request.book.BookUpdateRequest;
 import com.nozama.api.application.dto.response.BookResponse;
+import com.nozama.api.application.mapper.BookMapper;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;
 import com.nozama.api.domain.entity.Book;
@@ -35,6 +35,7 @@ import com.nozama.api.domain.repository.AuthorRepository;
 import com.nozama.api.domain.repository.CategoryRepository;
 import com.nozama.api.domain.repository.PublisherRepository;
 import com.nozama.api.domain.usecase.book.ManageBook;
+import com.nozama.api.domain.usecase.book.ManageBookActiveStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,8 +49,11 @@ public class BookController {
 	private ManageBook manageBookUseCase;
 
 	@Autowired
+	private ManageBookActiveStatus manageBookActiveStatusUseCase;
+
+	@Autowired
   private EntityMapper entityMapper;
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
@@ -58,31 +62,43 @@ public class BookController {
 	
 	@Autowired
 	private PublisherRepository publisherRepository;
+	
+	@Autowired
+	private BookMapper bookMapper;
+
+	@PostConstruct
+	private void initialize() {
+		bookMapper
+			.getMapper()
+			.createTypeMap(BookCreateRequest.class, Book.class)
+			.addMappings(mapper -> mapper.skip(Book::setId));
+	}
 
 	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Creates an book", description = "Creates an book based on the request's body payload.", tags = { "Book" })
-	public ResponseEntity<BookResponse> create(@RequestBody BookRequest payload) {
+	public ResponseEntity<BookResponse> create(@RequestBody BookCreateRequest payload) {
 		
-		Set<Category> categories = payload.getCategoriesId().stream()
+		Set<Category> categories = payload.getCategoriesId()
+			.stream()
 			.map(id -> categoryRepository.findById(id)
-					.orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found.")))
+			.orElseThrow(() -> new EntityNotFoundException("Category with id " + id + " was not found.")))
 			.collect(Collectors.toSet());
 
-		Set<Author> authors = payload.getAuthorsId().stream()
+		Set<Author> authors = payload.getAuthorsId()
+			.stream()
 			.map(id -> authorRepository.findById(id)
-					.orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found.")))
+			.orElseThrow(() -> new EntityNotFoundException("Author with id " + id + " was not found.")))
 			.collect(Collectors.toSet());
 
 		Publisher publisher = publisherRepository
 			.findById(payload.getPublisherId())
 			.orElseThrow(() -> new EntityNotFoundException("Publisher with id " + payload.getPublisherId() + " was not found."));
 
-		Book book = entityMapper.mapEntity(payload, Book.class);
+		Book book = bookMapper.toBook(payload);
 
 		book.setCategories(categories);
 		book.setAuthors(authors);
 		book.setPublisher(publisher);
-		book.setActive(true);
 
 		book = manageBookUseCase.create(book);
 
@@ -116,7 +132,7 @@ public class BookController {
 	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@Operation(summary = "Updates an book by its id", description = "Finds an book by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", tags = {
 			"Book" })
-	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookRequest payload) {
+	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookUpdateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId().stream()
 			.map(category -> categoryRepository.findById(category)
@@ -151,6 +167,13 @@ public class BookController {
 			"Book" })
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		manageBookUseCase.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping(value = "/{id}/active")
+	public ResponseEntity<?> active(@PathVariable("id") Long id, @RequestBody BookActiveStatusRequest payload) {
+		Boolean active = payload.getActive();
+		manageBookActiveStatusUseCase.setActive(id, active);
 		return ResponseEntity.noContent().build();
 	}
 
