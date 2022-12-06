@@ -23,6 +23,16 @@ These are the features that either I have already implemented or I intend to imp
 | Authentication and Authorization (Admin and Customer users and protected endpoints)| Pending |
 | Order making (Users be able to add items to their cart and purchase) | Pending |
 
+## Architecture
+The architecture of this project was somewhat inspired by the Clean Architecture. I tried to create something myself and attempted to follow a more simple structure, as this project is more simple and does not required a so neat and advanced organization. Also, as the intent __is__ to use Spring Boot as __the__ framework, I intentionally didn't worry about making the project decoupled from Spring.  
+Basically, this is the structure:  
+- Application:
+  * Interaction with the external world and utilization of the domain layer. Basically the controllers.
+- Domain:
+  * Business-specific stuff, such as the entities and the use cases.
+- Infrastructure:
+  * Any configuration required by the Spring and the libraries used.
+
 ## Technologies Used
 So far, these technologies have been used:  
 - Java 17 LTS with Maven
