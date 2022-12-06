@@ -16,7 +16,7 @@ As this project consists of a **REST** API, one of the goals is to follow the <a
 Also, the transactions performed by this project will be entirely fake (some simple database operations to simulate order registration and payment making) and thus there will be no interactions with no real payment API.
 
 ## Features
-These are the features that either I have already implemented or I intent to implement:
+These are the features that either I have already implemented or I intend to implement:
 | Feature | Status |
 | :------ | :-----: |
 | CRUD of the main entities (Book, Author, Category and Publisher) | Implemented |
