@@ -39,6 +39,7 @@ So far, these technologies have been used:
 - Spring Boot
 - Hibernate
 - Spring Data JPA
+- Spring Security
 - JUnit 5
 - Mockito
 - Spring HATEOAS
