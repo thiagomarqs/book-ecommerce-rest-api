@@ -1,4 +1,4 @@
-package com.nozama.api.infrastructure.configuration.web;
+package com.nozama.api.infrastructure.web;
 
 import java.util.Map;
 

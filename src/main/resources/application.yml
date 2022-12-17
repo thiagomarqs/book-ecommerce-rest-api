@@ -8,6 +8,8 @@
     user:
       name: user
       password: user
+  jpa:
+    defer-datasource-initialization: true
 hibernate:
   physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 jpa:

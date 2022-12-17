@@ -10,12 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Email;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.br.CPF;
@@ -29,18 +29,13 @@ public class Customer {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_id")
+  private User user;
+
   @NotBlank(message = "The full name is required.")
   @Size(max = 255, message = "The full name must not exceed 255 characters.")
   private String fullName;
-
-  @NotBlank(message = "The e-mail is required.")
-  @Size(max = 50)
-  @Email(message = "Please inform a valid e-mail address.")
-  @Column(unique = true)
-  private String email;
-
-  @NotBlank(message = "The password is required.")
-  private String password;
 
   @NotNull(message = "The birth date is required.")
   @Past
@@ -48,7 +43,8 @@ public class Customer {
   private LocalDate birthDate;
 
   @NotBlank(message = "The CPF is required.")
-  @CPF(message = "The informed CPF is not valid. It must containt exactly 14, including dots and one hyphen. Example: 111.222.333-00.")
+  @CPF(message = "The informed CPF is not valid. It must contain exactly 14 characters, including dots and one hyphen. Example: 111.222.333-00.")
+  @Column(unique = true)
   private String cpf;
 
   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
@@ -58,21 +54,6 @@ public class Customer {
 
   public Customer() {}
   
-  public Customer(Long id,
-      @NotBlank @Size(max = 255, message = "The full name must not exceed 255 characters.") String fullName,
-      @NotBlank @Size(max = 50) @Email(message = "Please inform a valid e-mail address.") String email,
-      @NotBlank(message = "The password is required.") String password, @NotNull @Past LocalDate birthDate,
-      @NotBlank @Size(min = 11, max = 11, message = "The CPF must contain exactly 11 characters. Example: 11122233300.") @Pattern(regexp = "^[0-9]*$") String cpf,
-      LocalDate registeredAt) {
-    this.id = id;
-    this.fullName = fullName;
-    this.email = email;
-    this.password = password;
-    this.birthDate = birthDate;
-    this.cpf = cpf;
-    this.registeredAt = registeredAt;
-  }
-
   public Long getId() {
     return id;
   }
@@ -87,22 +68,6 @@ public class Customer {
 
   public void setFullName(String fullName) {
     this.fullName = fullName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
   }
 
   public LocalDate getBirthDate() {
@@ -133,6 +98,18 @@ public class Customer {
     return addresses;
   }
 
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public void setAddresses(List<Address> addresses) {
+    this.addresses = addresses;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -157,6 +134,5 @@ public class Customer {
       return false;
     return true;
   }
-
   
 }
