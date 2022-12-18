@@ -20,7 +20,7 @@ These are the features that either I have already implemented or I intend to imp
 | Feature | Status |
 | :------ | :-----: |
 | CRUD of the main entities (Book, Author, Category and Publisher) | Implemented |
-| Authentication and Authorization (Admin and Customer users and protected endpoints)| Pending |
+| Authentication and Authorization (Admin and Customer users and protected endpoints)| Implemented |
 | Order making (Users be able to add items to their cart and purchase) | Pending |
 
 ## Architecture
