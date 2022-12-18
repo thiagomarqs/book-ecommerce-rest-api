@@ -3,6 +3,7 @@ package com.nozama.api.infrastructure.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.nozama.api.application.filter.JwtFilter;
+import com.nozama.api.domain.enums.RoleName;
 
 @Configuration
 public class SecurityConfiguration {
@@ -24,8 +26,13 @@ public class SecurityConfiguration {
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests()
-				.antMatchers("/api/auth/register", "/api/auth/login").permitAll()
-				.antMatchers("/**").authenticated()
+				.antMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
+				.antMatchers(HttpMethod.POST).hasRole(RoleName.ADMIN.name())
+				.antMatchers(HttpMethod.PUT).hasRole(RoleName.ADMIN.name())
+				.antMatchers(HttpMethod.PATCH).hasRole(RoleName.ADMIN.name())
+				.antMatchers(HttpMethod.DELETE).hasRole(RoleName.ADMIN.name())
+				.antMatchers(HttpMethod.GET).permitAll()
+				.anyRequest().hasAnyRole(RoleName.ADMIN.name())
 			.and()
 				.csrf().ignoringAntMatchers("/**")
 			.and()
