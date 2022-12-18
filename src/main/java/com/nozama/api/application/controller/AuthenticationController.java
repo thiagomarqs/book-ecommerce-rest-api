@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nozama.api.application.dto.request.authentication.LoginRequest;
 import com.nozama.api.application.dto.request.authentication.RegistrationRequest;
 import com.nozama.api.application.dto.response.LoginResponse;
+import com.nozama.api.application.exception.AuthenticationException;
+import com.nozama.api.application.service.JwtService;
 import com.nozama.api.domain.entity.builder.CustomerBuilder;
 import com.nozama.api.domain.entity.builder.UserBuilder;
 import com.nozama.api.domain.usecase.customer.ManageCustomer;
-import com.nozama.api.infrastructure.security.jwt.JwtTokenUtils;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -38,7 +40,7 @@ public class AuthenticationController {
   private AuthenticationManager authenticationManager;
 
   @Autowired
-  private JwtTokenUtils jwtTokenUtils;
+  private JwtService jwtService;
   
   @PostMapping(
     path = "/register",
@@ -81,15 +83,20 @@ public class AuthenticationController {
       request.getEmail(),
       request.getPassword()
     );
-
-    authenticationManager.authenticate(authRequest);
+ 
+    try {
+      authenticationManager.authenticate(authRequest);
+    }
+    catch(BadCredentialsException e) {
+      throw new AuthenticationException("Invalid e-mail or password. Please try again");
+    }
 
     var user = UserBuilder
       .builder()
       .withEmail(request.getEmail())
       .build();
 
-    var token = jwtTokenUtils.generateToken(user);
+    var token = jwtService.generateToken(user);
 
     var response = new LoginResponse(token);
     
