@@ -2,12 +2,23 @@ package com.nozama.api.application.dto.request.authentication;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
+
 public class RegistrationRequest {
 
+  @NotBlank
   private String email;
+
+  @NotBlank
   private String password;
+
+  @NotBlank
   private String fullName;
+
+  @NotBlank
   private LocalDate birthDate;  
+
+  @NotBlank
   private String cpf;
   
   public String getEmail() {

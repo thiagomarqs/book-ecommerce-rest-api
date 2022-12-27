@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nozama.api.application.dto.request.publisher.PublisherActiveStatusRequest;
 import com.nozama.api.application.dto.request.publisher.PublisherRequest;
-import com.nozama.api.application.dto.response.PublisherResponse;
+import com.nozama.api.application.dto.response.publisher.PublisherResponse;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Publisher;
 import com.nozama.api.domain.usecase.publisher.ManagePublisher;

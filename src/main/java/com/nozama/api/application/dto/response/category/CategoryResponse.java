@@ -1,4 +1,4 @@
-package com.nozama.api.application.dto.response;
+package com.nozama.api.application.dto.response.category;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

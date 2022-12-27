@@ -17,7 +17,7 @@ public class ManageBookActiveStatus {
 
   public void setActive(Long id, Boolean active) {
     
-    final Book book = repository
+    Book book = repository
       .findById(id)
       .orElseThrow(() -> new EntityNotFoundException("Book with id " + id + " not found."));
 

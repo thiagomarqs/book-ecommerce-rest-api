@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nozama.api.application.dto.request.author.AuthorRequest;
-import com.nozama.api.application.dto.response.AuthorResponse;
+import com.nozama.api.application.dto.response.author.AuthorResponse;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;
 import com.nozama.api.domain.exception.EntityNotFoundException;

@@ -1,5 +1,6 @@
 package com.nozama.api.domain.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

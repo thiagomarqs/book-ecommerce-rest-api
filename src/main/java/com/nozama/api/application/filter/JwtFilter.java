@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.nozama.api.application.util.JwtUtil;
+import com.nozama.api.application.util.JwtUtils;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -24,18 +24,18 @@ public class JwtFilter extends OncePerRequestFilter {
   private UserDetailsService userDetailsService;
 
   @Autowired
-  private JwtUtil jwtUtil;
+  private JwtUtils jwtUtils;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     final var authorizationHeaderValue = request.getHeader("Authorization");
     
-    if(JwtUtil.isAuthorizationHeaderValid(authorizationHeaderValue)) {
+    if(JwtUtils.isAuthorizationHeaderValid(authorizationHeaderValue)) {
 
-      final var token = JwtUtil.extractTokenFromAuthorizationHeaderValue(authorizationHeaderValue);
-      final var username = jwtUtil.extractUsernameFromToken(token);
-      final var isAuthenticatedAlready = SecurityContextHolder.getContext().getAuthentication() != null;
-      final var shouldTryAuthentication = username != null && !isAuthenticatedAlready;
+      final var token = JwtUtils.extractTokenFromAuthorizationHeaderValue(authorizationHeaderValue);
+      final var username = jwtUtils.extractUsernameFromToken(token);
+      final var isAuthenticated = SecurityContextHolder.getContext().getAuthentication() != null;
+      final var shouldTryAuthentication = username != null && !isAuthenticated;
 
       if(shouldTryAuthentication) tryAuthentication(request, token, username);
 

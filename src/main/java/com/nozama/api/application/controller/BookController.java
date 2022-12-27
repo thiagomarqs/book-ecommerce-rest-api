@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nozama.api.application.dto.request.book.BookActiveStatusRequest;
 import com.nozama.api.application.dto.request.book.BookCreateRequest;
 import com.nozama.api.application.dto.request.book.BookUpdateRequest;
-import com.nozama.api.application.dto.response.BookResponse;
+import com.nozama.api.application.dto.response.book.BookResponse;
 import com.nozama.api.application.mapper.BookMapper;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;

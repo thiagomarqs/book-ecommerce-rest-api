@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nozama.api.application.dto.request.category.CategoryRequest;
-import com.nozama.api.application.dto.response.CategoryResponse;
+import com.nozama.api.application.dto.response.category.CategoryResponse;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Category;
 import com.nozama.api.domain.usecase.category.ManageCategory;

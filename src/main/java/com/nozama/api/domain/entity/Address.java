@@ -2,6 +2,7 @@ package com.nozama.api.domain.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -26,7 +27,7 @@ public class Address {
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  @NotNull(message = "The address type is required.")
+  @NotNull(message = "The address type is required. It can be either 'SHIPPING' or 'BILLING'.")
   private AddressType type;
 
   @NotBlank(message = "The address is required.")
@@ -59,36 +60,17 @@ public class Address {
   private String uf;
 
   @ManyToOne
-  @JoinColumn(name = "CUSTOMER_ID")
+  @JoinColumn(name = "CUSTOMER_ID", updatable = false)
   private Customer customer;
 
   @FutureOrPresent
+  @Column(updatable = false)
   private LocalDate createdAt;
 
   @NotNull
   private Boolean active;
 
   public Address() {}
-
-  public Address(Long id, @NotNull(message = "The address type is required.") AddressType type,
-      @NotBlank(message = "The address is required.") @Size(max = 255) String address,
-      @NotBlank(message = "The number is required.") @Size(max = 6) @Pattern(regexp = "^[0-9]*$") String number,
-      @NotBlank(message = "The complement is required.") @Size(max = 255) String complement,
-      @NotBlank(message = "The CEP is required.") @Size(min = 9, max = 9, message = "The CEP must have exactly 9 characters, being composed only of numbers and only one hyphen.") @Pattern(regexp = "^d{5}-d{3}$", message = "The informed CEP is not in a valid CEP format. Example of a correct CEP: 012345-000") String cep,
-      @NotBlank(message = "The city is required.") @Size(max = 100) String city,
-      @NotBlank(message = "The state is required.") @Size(max = 100) String state,
-      @NotBlank(message = "The UF is required.") @Size(min = 2, max = 2) String uf, LocalDate createdAt) {
-    this.id = id;
-    this.type = type;
-    this.address = address;
-    this.number = number;
-    this.complement = complement;
-    this.cep = cep;
-    this.city = city;
-    this.state = state;
-    this.uf = uf;
-    this.createdAt = createdAt;
-  }
 
   public Long getId() {
     return id;

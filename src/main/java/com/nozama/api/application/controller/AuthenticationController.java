@@ -2,6 +2,8 @@ package com.nozama.api.application.controller;
 
 import java.time.LocalDate;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nozama.api.application.dto.request.authentication.LoginRequest;
 import com.nozama.api.application.dto.request.authentication.RegistrationRequest;
-import com.nozama.api.application.dto.response.LoginResponse;
+import com.nozama.api.application.dto.response.login.LoginResponse;
 import com.nozama.api.application.exception.AuthenticationException;
 import com.nozama.api.application.service.JwtService;
 import com.nozama.api.domain.entity.builder.CustomerBuilder;
 import com.nozama.api.domain.entity.builder.UserBuilder;
 import com.nozama.api.domain.usecase.customer.ManageCustomer;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -47,7 +50,12 @@ public class AuthenticationController {
     consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
     produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
   )
-  public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
+  @Operation(
+    summary = "Registers a new customer.",
+    description = "Registers a new customer with the provided information. A user and a profile will be created for this new customer.",
+    tags = { "Authentication" }
+  )
+  public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest request) {
     
     var encodedPassword = encoder.encode(request.getPassword());
 
@@ -78,7 +86,12 @@ public class AuthenticationController {
     consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
     produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
   )
-  public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+  @Operation(
+    summary = "Login",
+    description = "Logs in a customer. If the provided credentials aren't valid, an exception will be thrown.",
+    tags = { "Authentication" }
+  )
+  public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
     var authRequest = new UsernamePasswordAuthenticationToken(
       request.getEmail(),
       request.getPassword()

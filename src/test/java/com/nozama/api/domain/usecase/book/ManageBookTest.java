@@ -50,7 +50,6 @@ public class ManageBookTest {
   void When_CreatingNewBook_Expect_BookToHaveACreationDate() {
     Book book = new Book();
 
-    when(repository.save(book)).thenReturn(book);
     manageBook.create(book);
 
     assertInstanceOf(LocalDate.class, book.getCreatedAt());

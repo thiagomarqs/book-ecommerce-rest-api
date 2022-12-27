@@ -1,16 +1,18 @@
 package com.nozama.api.domain.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
@@ -20,17 +22,20 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.nozama.api.domain.enums.AddressType;
+import com.nozama.api.domain.exception.EntityNotFoundException;
+import com.nozama.api.domain.exception.OperationNotAllowedException;
 import com.nozama.api.domain.validation.EighteenOrOlder;
 
 @Entity
-public class Customer {
+public class Customer implements Serializable {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @MapsId
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", referencedColumnName = "id")
   private User user;
 
   @NotBlank(message = "The full name is required.")
@@ -47,9 +52,14 @@ public class Customer {
   @Column(unique = true)
   private String cpf;
 
-  @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+  @OneToMany(
+    mappedBy = "customer", 
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
   private List<Address> addresses = new ArrayList<>();
 
+  @Column(updatable = false)
   private LocalDate registeredAt;
 
   public Customer() {}
@@ -94,10 +104,17 @@ public class Customer {
     this.registeredAt = registeredAt;
   }
 
+  public void addAddress(Address address) {
+    if(address == null) return;
+
+    this.addresses.add(address);
+    address.setCustomer(this);
+  }
+
   public List<Address> getAddresses() {
     return addresses;
   }
-
+  
   public User getUser() {
     return user;
   }
@@ -106,8 +123,40 @@ public class Customer {
     this.user = user;
   }
 
-  public void setAddresses(List<Address> addresses) {
-    this.addresses = addresses;
+  public Optional<Address> getAddress(Long addressId) {
+    return addresses.stream()
+      .filter(a -> a.getId().equals(addressId))
+      .findFirst();
+  }
+
+  public void deleteAddress(Long addressId) {
+    if(!hasAddress(addressId)) throw new EntityNotFoundException("The provided address does not belong to this customer.");
+    
+    var address = getAddress(addressId).get();
+    var addressType = address.getType();
+
+    if(isAddressTheOnlyOneOfItsType(addressType)) { 
+      var cantDeleteAddressErrorMessage = String.format("Cannot delete this %s address because it is the only of its type. Please, add another address of the same type to be able to delete this one.", addressType.name().toLowerCase());
+      throw new OperationNotAllowedException(cantDeleteAddressErrorMessage);
+    }
+
+    Predicate<? super Address> matchesId = a -> a.getId().equals(addressId);
+    
+    addresses.removeIf(matchesId);
+  }
+
+  public Boolean hasAddress(Long addressId) {
+    Predicate<? super Address> matchesId = a -> a.getId().equals(addressId);
+
+    return addresses.stream().anyMatch(matchesId);
+  }
+
+  public Boolean isAddressTheOnlyOneOfItsType(AddressType type) {
+    Predicate<? super Address> onlyAddressesOfThisType = a -> a.getType().equals(type);
+    
+    return addresses.stream()
+      .filter(onlyAddressesOfThisType)
+      .count() == 1;
   }
 
   @Override

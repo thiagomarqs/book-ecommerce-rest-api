@@ -1,4 +1,4 @@
-package com.nozama.api.application.dto.response;
+package com.nozama.api.application.dto.response.author;
 
 import com.nozama.api.application.controller.AuthorController;
 import org.springframework.hateoas.EntityModel;
