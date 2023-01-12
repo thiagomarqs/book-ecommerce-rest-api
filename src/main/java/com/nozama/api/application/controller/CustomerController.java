@@ -2,6 +2,8 @@ package com.nozama.api.application.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
@@ -18,10 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nozama.api.application.dto.request.address.AddressCreateRequest;
 import com.nozama.api.application.dto.request.address.AddressUpdateRequest;
+import com.nozama.api.application.dto.request.cartItem.CartItemRequest;
+import com.nozama.api.application.dto.request.cartItem.UpdateCartItemUnitsRequest;
 import com.nozama.api.application.dto.response.address.AddressResponse;
+import com.nozama.api.application.dto.response.cartItem.CartItemResponse;
 import com.nozama.api.application.mapper.AddressMapper;
+import com.nozama.api.application.mapper.CartItemMapper;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Address;
+import com.nozama.api.domain.usecase.book.ManageBook;
+import com.nozama.api.domain.usecase.cart.ManageCart;
 import com.nozama.api.domain.usecase.customer.ManageCustomerAddresses;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,10 +47,19 @@ public class CustomerController {
   private ManageCustomerAddresses manageCustomerAddressesUseCase;
 
   @Autowired
+  private ManageCart manageCartUseCase;
+
+  @Autowired
+  private ManageBook manageBookUseCase;
+
+  @Autowired
   private EntityMapper entityMapper;
 
   @Autowired
   private AddressMapper addressMapper;
+
+  @Autowired
+  private CartItemMapper cartItemMapper;
 
   @GetMapping(
     path = "/{id}/addresses", 
@@ -132,6 +149,92 @@ public class CustomerController {
   public ResponseEntity<?> deleteAddress(@PathVariable(value = "id") Long customerId, @PathVariable(value = "addressId") Long addressId) {
     manageCustomerAddressesUseCase.deleteAddress(customerId, addressId);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping(
+    path = "/{id}/cart",
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Get Cart.",
+    description = "Gets all items in the customer's cart.",
+    tags = { "Customer", "Cart" }
+  )
+  @PreAuthorize("#customerId == principal.id")
+  public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable(value = "id") Long customerId) {
+    var items = manageCartUseCase.getCart(customerId);
+    var response = cartItemMapper.toCartItemResponseList(items);
+    response = response.stream().map(i -> i.setLinks()).toList();
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping(
+    path = "/{id}/cart/items/{itemId}",
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Get One Item.",
+    description = "Gets a cart item by its id.",
+    tags = { "Customer", "Cart" }
+  )
+  @PreAuthorize("#customerId == principal.id")
+  public ResponseEntity<CartItemResponse> getCartItem(@PathVariable(value = "id") Long customerId, @PathVariable(value = "itemId") Long cartItemId) {
+    var item = manageCartUseCase.getItem(customerId, cartItemId);
+    var response = cartItemMapper.toCartItemResponse(item).setLinks();
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping(
+    path = "/{id}/cart/items",
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+    consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Add item to cart.",
+    description = "Adds an item to the customers' cart and returns all items if the operation is successful. If the book contained in the item was already added, the operation will fail.",
+    tags = { "Customer", "Cart" }
+  )
+  @PreAuthorize("#customerId == principal.id")
+  public ResponseEntity<List<CartItemResponse>> addItemToCart(@PathVariable(value = "id") Long customerId, @RequestBody CartItemRequest request) {
+    var book = manageBookUseCase.findById(request.getBookId());
+    var item = cartItemMapper.toCartItem(request, book);
+    var items = manageCartUseCase.addItem(customerId, item);
+    var response = cartItemMapper.toCartItemResponseList(items);
+    response = response.stream().map(i -> i.setLinks()).toList();
+    return ResponseEntity.ok(response);
+  }
+
+  @DeleteMapping(
+    path = "/{id}/cart/items/{itemId}",
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Delete Item.",
+    description = "Deletes an item from the cart. Fails if the provided id does not exist.",
+    tags = { "Customer", "Cart" }
+  )
+  @PreAuthorize("#customerId == principal.id")
+  public ResponseEntity<?> deleteItemFromCart(@PathVariable(value = "id") Long customerId, @PathVariable(value = "itemId") Long itemId) {
+    manageCartUseCase.deleteItem(customerId, itemId);
+    return ResponseEntity.ok().build();
+  }
+
+  @PutMapping(
+    path = "/{id}/cart/items/{itemId}",
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+    consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Update Item Units.",
+    description = "Updates the units of an item of the cart. Fails if the provided id does not exist or if the new unit is not greater than 0.",
+    tags = { "Customer", "Cart" }
+  )
+  @PreAuthorize("#customerId == principal.id")
+  public ResponseEntity<CartItemResponse> updateCartItemUnits(@PathVariable(value = "id") Long customerId, @PathVariable(value = "itemId") Long itemId, @RequestBody @Valid UpdateCartItemUnitsRequest request) {
+    var newUnits = request.getUnits();
+    var item = manageCartUseCase.updateCartItemUnits(customerId, itemId, newUnits);
+    var response = cartItemMapper.toCartItemResponse(item).setLinks();
+    return ResponseEntity.ok(response);
   }
 
 

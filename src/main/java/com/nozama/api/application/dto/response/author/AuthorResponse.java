@@ -1,12 +1,14 @@
 package com.nozama.api.application.dto.response.author;
 
-import com.nozama.api.application.controller.AuthorController;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.Objects;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
-import java.util.Objects;
+import com.nozama.api.application.controller.AuthorController;
 
 public class AuthorResponse extends EntityModel<AuthorResponse> {
 

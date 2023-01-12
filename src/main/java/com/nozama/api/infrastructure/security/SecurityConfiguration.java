@@ -3,6 +3,7 @@ package com.nozama.api.infrastructure.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,6 +20,7 @@ import com.nozama.api.domain.enums.RoleName;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Profile("dev")
 public class SecurityConfiguration {
 
 	@Autowired
@@ -29,7 +31,7 @@ public class SecurityConfiguration {
 		http
 			.authorizeHttpRequests()
 				.antMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
-				.antMatchers("/api/customers/**").hasAnyRole(RoleName.CUSTOMER.name(), RoleName.ADMIN.name())
+				.antMatchers("/api/customers/**/*").hasAnyRole(RoleName.CUSTOMER.name(), RoleName.ADMIN.name())
 				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET).permitAll()
 				.antMatchers(HttpMethod.POST).hasRole(RoleName.ADMIN.name())

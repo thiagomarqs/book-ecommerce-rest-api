@@ -15,7 +15,7 @@ import com.nozama.api.domain.enums.Currency;
 public class Price {
 	
 	@NotNull
-	@Min(value = 1, message = "The price must be at least $1.00")
+	@Min(value = 1, message = "The amount must be at least $1.00")
 	private BigDecimal price;
 	
 	@NotNull

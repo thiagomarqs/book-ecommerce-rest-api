@@ -1,6 +1,5 @@
 package com.nozama.api.domain.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -75,6 +74,10 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+  
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public void setPassword(String password) {

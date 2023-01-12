@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 
-import com.nozama.api.application.controller.BookController;
 import com.nozama.api.application.controller.CustomerController;
 import com.nozama.api.domain.enums.AddressType;
 

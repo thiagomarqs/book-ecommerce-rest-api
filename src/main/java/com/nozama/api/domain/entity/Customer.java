@@ -59,11 +59,31 @@ public class Customer implements Serializable {
   )
   private List<Address> addresses = new ArrayList<>();
 
+  @OneToMany(
+    mappedBy = "customer", 
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  private List<CartItem> cartItems = new ArrayList<>();
+
   @Column(updatable = false)
   private LocalDate registeredAt;
 
   public Customer() {}
   
+  public Customer(
+      User user,
+      String fullName,
+      LocalDate birthDate,
+      String cpf,
+      LocalDate registeredAt) {
+    this.user = user;
+    this.fullName = fullName;
+    this.birthDate = birthDate;
+    this.cpf = cpf;
+    this.registeredAt = registeredAt;
+  }
+
   public Long getId() {
     return id;
   }
@@ -121,6 +141,19 @@ public class Customer implements Serializable {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public List<CartItem> getCartItems() {
+    return cartItems;
+  }
+
+  public void addCartItems(List<CartItem> items) {
+    items.forEach(this::addCartItem);
+  }
+  
+  public void addCartItem(CartItem item) {
+    item.setCustomer(this);
+    cartItems.add(item);
   }
 
   public Optional<Address> getAddress(Long addressId) {
