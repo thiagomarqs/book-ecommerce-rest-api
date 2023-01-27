@@ -47,3 +47,9 @@ So far, these technologies have been used:
 - Springdoc
 
 The full list of dependencies can be checked out in this project's pom.xml file.
+
+## Running the project
+This project uses Maven. Therefore, after having cloned the project and installed the dependencies, run `mvn spring-boot:run` to execute the project in your local enviroment.
+
+## Documentation
+The Swagger documentation was built using [Springdoc](https://springdoc.org/) and it's available at http://localhost:8080/swagger-ui.html
