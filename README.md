@@ -21,7 +21,7 @@ These are the features that either I have already implemented or I intend to imp
 | :------ | :-----: |
 | CRUD of the main entities (Book, Author, Category and Publisher) | Implemented |
 | Authentication and Authorization (Admin and Customer users and protected endpoints)| Implemented |
-| Order making (Users be able to add items to their cart and purchase) | Pending |
+| Order making (Users be able to add items to their cart and purchase) | Implemented |
 
 ## Architecture
 The architecture of this project was somewhat inspired by the Clean Architecture. I tried to create something myself and attempted to follow a more simple structure, as this project is more simple and does not required a so neat and advanced organization. Also, as the intent __is__ to use Spring Boot as __the__ framework, I intentionally didn't worry about making the project decoupled from Spring.  
