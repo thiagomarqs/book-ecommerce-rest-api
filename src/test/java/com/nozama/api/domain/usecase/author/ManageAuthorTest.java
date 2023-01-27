@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.nozama.api.domain.entity.Author;
 import com.nozama.api.domain.exception.EntityNotFoundException;
+import com.nozama.api.domain.exception.InvalidArgumentException;
 import com.nozama.api.domain.exception.InvalidEntityException;
 import com.nozama.api.domain.repository.AuthorRepository;
 
@@ -73,7 +74,7 @@ public class ManageAuthorTest {
 
   @Test
   void Given_NullAuthorId_When_DeletingAuthor_Then_ThrowException() {
-    assertThrows(IllegalArgumentException.class, () -> manageAuthor.delete(null));
+    assertThrows(InvalidArgumentException.class, () -> manageAuthor.delete(null));
   }
 
   @Test

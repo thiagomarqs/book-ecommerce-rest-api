@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.nozama.api.domain.entity.Customer;
 import com.nozama.api.domain.entity.User;
 import com.nozama.api.domain.enums.RoleName;
+import com.nozama.api.domain.exception.EntityNotFoundException;
 import com.nozama.api.domain.repository.CustomerRepository;
 import com.nozama.api.domain.repository.RoleRepository;
 
@@ -26,6 +27,12 @@ public class ManageCustomer {
 
     user.setRoles(roles);
     customerRepository.save(customer);
+  }
+
+  public Customer find(Long id) {
+    return customerRepository
+      .findById(id)
+      .orElseThrow(() -> new EntityNotFoundException(String.format("Customer with id %d not found.", id)));
   }
 
 }

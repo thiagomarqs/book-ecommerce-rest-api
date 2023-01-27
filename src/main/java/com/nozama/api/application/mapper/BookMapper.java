@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import com.nozama.api.application.dto.response.book.BookResponse;
 import com.nozama.api.domain.entity.Book;
 
 @Component
@@ -14,6 +15,10 @@ public class BookMapper {
 
   public <Dto> Book toBook(Dto source) {
     return mapper.map(source, Book.class);
+  }
+
+  public BookResponse toBookResponse(Book source) {
+    return mapper.map(source, BookResponse.class);
   }
 
   public <Dto> List<Book> toBookList(List<Dto> source) {

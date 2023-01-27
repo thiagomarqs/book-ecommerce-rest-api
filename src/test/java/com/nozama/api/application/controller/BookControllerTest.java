@@ -30,14 +30,26 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nozama.api.application.dto.request.book.*;
-import com.nozama.api.application.dto.response.*;
-import com.nozama.api.application.mapper.*;
-import com.nozama.api.domain.entity.*;
-import com.nozama.api.domain.enums.*;
+import com.nozama.api.application.dto.request.book.BookActiveStatusRequest;
+import com.nozama.api.application.dto.request.book.BookCreateRequest;
+import com.nozama.api.application.dto.request.book.BookUpdateRequest;
+import com.nozama.api.application.dto.response.author.AuthorResponse;
+import com.nozama.api.application.dto.response.book.BookResponse;
+import com.nozama.api.application.dto.response.category.CategoryResponse;
+import com.nozama.api.application.dto.response.publisher.PublisherResponse;
+import com.nozama.api.application.mapper.BookMapper;
+import com.nozama.api.application.mapper.EntityMapper;
+import com.nozama.api.domain.entity.Author;
+import com.nozama.api.domain.entity.Book;
+import com.nozama.api.domain.entity.Category;
+import com.nozama.api.domain.entity.Publisher;
+import com.nozama.api.domain.enums.Currency;
+import com.nozama.api.domain.enums.Format;
+import com.nozama.api.domain.enums.Language;
 import com.nozama.api.domain.exception.EntityNotFoundException;
 import com.nozama.api.domain.repository.AuthorRepository;
 import com.nozama.api.domain.repository.CategoryRepository;
@@ -47,6 +59,7 @@ import com.nozama.api.domain.usecase.book.ManageBookActiveStatus;
 import com.nozama.api.domain.vo.BookDimensions;
 import com.nozama.api.domain.vo.Price;
 
+@ActiveProfiles("test")
 @WebMvcTest(controllers = BookController.class)
 @Tag("Books")
 class BookControllerTest {

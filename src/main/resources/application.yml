@@ -18,3 +18,9 @@ security:
   jwt:
     expiration: 3600000
     secret: ExtremelySecureAndLengthyPasswordThatReallyProtects123
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-exception: false
+    include-stacktrace: never

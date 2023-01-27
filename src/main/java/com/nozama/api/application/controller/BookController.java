@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nozama.api.application.dto.request.book.BookActiveStatusRequest;
 import com.nozama.api.application.dto.request.book.BookCreateRequest;
 import com.nozama.api.application.dto.request.book.BookUpdateRequest;
-import com.nozama.api.application.dto.response.BookResponse;
+import com.nozama.api.application.dto.response.book.BookResponse;
 import com.nozama.api.application.mapper.BookMapper;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Author;
@@ -66,6 +68,11 @@ public class BookController {
 	@Autowired
 	private BookMapper bookMapper;
 
+	private Link[] links = {
+		Link.of("/api/books"),
+		Link.of("/api/books/{id}", "book")
+	};
+
 	@PostConstruct
 	private void initialize() {
 		bookMapper
@@ -74,8 +81,15 @@ public class BookController {
 			.addMappings(mapper -> mapper.skip(Book::setId));
 	}
 
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	@Operation(summary = "Creates an book", description = "Creates an book based on the request's body payload.", tags = { "Book" })
+	@PostMapping(
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+	)
+	@Operation(
+		summary = "Creates an book", 
+		description = "Creates an book based on the request body payload.", 
+		tags = { "Book" }
+	)
 	public ResponseEntity<BookResponse> create(@RequestBody BookCreateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId()
@@ -109,8 +123,15 @@ public class BookController {
 		return ResponseEntity.created(uri).body(response);
 	}
 
-	@GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	@Operation(summary = "Finds an book", description = "Finds an book by its Id.", tags = { "Book" })
+	@GetMapping(
+		value = "/{id}", 
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+	)
+	@Operation(
+		summary = "Finds an book", 
+		description = "Finds an book by its Id.", 
+		tags = { "Book" }
+	)
 	public ResponseEntity<BookResponse> findById(@PathVariable(value = "id") Long id) {
 		Book found = manageBookUseCase.findById(id);
 		BookResponse response = entityMapper.mapEntity(found, BookResponse.class).setLinks();
@@ -118,30 +139,43 @@ public class BookController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	@Operation(summary = "Finds all books", description = "Finds all books. If no book exists, an empty array will be returned.", tags = {
-			"Book" })
-	public ResponseEntity<List<BookResponse>> findAll() {
+	@GetMapping(
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+	)
+	@Operation(
+		summary = "Finds all books", 
+		description = "Finds all books. If no book exists, an empty array will be returned.", 
+		tags = { "Book" }
+	)
+	public ResponseEntity<CollectionModel<BookResponse>> findAll() {
 		List<Book> found = manageBookUseCase.findAll();
-		List<BookResponse> response = entityMapper.mapList(found, BookResponse.class).stream().map(a -> a.setLinks())
-				.toList();
+		List<BookResponse> list = entityMapper.mapList(found, BookResponse.class);
+
+		var response = CollectionModel.of(list, links);
 
 		return ResponseEntity.ok(response);
 	}
 
-	@PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	@Operation(summary = "Updates an book by its id", description = "Finds an book by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", tags = {
-			"Book" })
+	@PutMapping(
+		value = "/{id}", 
+		consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
+		produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+	)
+	@Operation(
+		summary = "Updates an book by its id", 
+		description = "Finds an book by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", 
+		tags = { "Book" }
+	)
 	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookUpdateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId().stream()
 			.map(category -> categoryRepository.findById(category)
-					.orElseThrow(() -> new EntityNotFoundException("Category with id " + category + " was not found.")))
+			.orElseThrow(() -> new EntityNotFoundException("Category with id " + category + " was not found.")))
 			.collect(Collectors.toSet());
 
 		Set<Author> authors = payload.getAuthorsId().stream()
 			.map(author -> authorRepository.findById(author)
-					.orElseThrow(() -> new EntityNotFoundException("Author with id " + author + " was not found.")))
+			.orElseThrow(() -> new EntityNotFoundException("Author with id " + author + " was not found.")))
 			.collect(Collectors.toSet());
 
 		Publisher publisher = publisherRepository
@@ -163,8 +197,11 @@ public class BookController {
 	}
 
 	@DeleteMapping("/{id}")
-	@Operation(summary = "Deletes an book by its id", description = "Finds an book by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", tags = {
-			"Book" })
+	@Operation(
+		summary = "Deletes an book by its id", 
+		description = "Finds an book by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", 
+		tags = { "Book" }
+	)
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		manageBookUseCase.delete(id);
 		return ResponseEntity.noContent().build();

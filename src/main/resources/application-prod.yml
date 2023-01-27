@@ -10,6 +10,6 @@
     locations: classpath:db/migration/prod
 server:
   error:
-    include-stacktrace: NEVER
+    include-stacktrace: never
 cors:
   allowed-origins: "*"

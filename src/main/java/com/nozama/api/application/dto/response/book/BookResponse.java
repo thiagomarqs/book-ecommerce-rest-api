@@ -1,4 +1,4 @@
-package com.nozama.api.application.dto.response;
+package com.nozama.api.application.dto.response.book;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -8,16 +8,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.nozama.api.application.controller.BookController;
+import com.nozama.api.application.dto.response.author.AuthorResponse;
+import com.nozama.api.application.dto.response.category.CategoryResponse;
+import com.nozama.api.application.dto.response.publisher.PublisherResponse;
 import com.nozama.api.domain.enums.Format;
 import com.nozama.api.domain.enums.Language;
 import com.nozama.api.domain.vo.BookDimensions;
 import com.nozama.api.domain.vo.Price;
 
-public class BookResponse extends EntityModel<BookResponse> {
+public class BookResponse extends RepresentationModel<BookResponse> {
 
 	private Long id;
 	private String sku;
@@ -37,9 +40,10 @@ public class BookResponse extends EntityModel<BookResponse> {
 	private Integer availableQuantity;
 	private LocalDate createdAt;
 	private Boolean active;
-	
+
 	public BookResponse() {
 	}
+
 	public BookResponse(Long id, String sku, String title, String description, List<String> imagesUrl, Price price,
 			Set<AuthorResponse> authors, Set<CategoryResponse> categories, Format format, Integer pages,
 			Language language, PublisherResponse publisher, LocalDate publishingDate, String isbn,
@@ -64,132 +68,165 @@ public class BookResponse extends EntityModel<BookResponse> {
 		this.active = active;
 	}
 
-
-
 	public BookResponse setLinks() {
 
-        Link self = linkTo(methodOn(BookController.class).findById(this.getId())).withSelfRel();
-        Link all = linkTo(methodOn(BookController.class).findAll()).withRel("authors");
+		Link self = linkTo(methodOn(BookController.class).findById(this.getId())).withSelfRel();
+		Link all = linkTo(methodOn(BookController.class).findAll()).withRel("books");
 
-        Link[] links = {
-            self,
-            all
-        };
+		Link[] links = {
+				self,
+				all
+		};
 
-        this.add(links);
+		this.add(links);
 
-        return this;
-    }
-	
+		return this;
+	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getSku() {
 		return sku;
 	}
+
 	public void setSku(String sku) {
 		this.sku = sku;
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public List<String> getImagesUrl() {
 		return imagesUrl;
 	}
+
 	public void setImagesUrl(List<String> imagesUrl) {
 		this.imagesUrl = imagesUrl;
 	}
+
 	public Price getPrice() {
 		return price;
 	}
+
 	public void setPrice(Price price) {
 		this.price = price;
 	}
+
 	public Set<AuthorResponse> getAuthors() {
 		return authors;
 	}
+
 	public void setAuthors(Set<AuthorResponse> authors) {
 		this.authors = authors;
 	}
+
 	public Set<CategoryResponse> getCategories() {
 		return categories;
 	}
+
 	public void setCategories(Set<CategoryResponse> categories) {
 		this.categories = categories;
 	}
+
 	public Format getFormat() {
 		return format;
 	}
+
 	public void setFormat(Format format) {
 		this.format = format;
 	}
+
 	public Integer getPages() {
 		return pages;
 	}
+
 	public void setPages(Integer pages) {
 		this.pages = pages;
 	}
+
 	public Language getLanguage() {
 		return language;
 	}
+
 	public void setLanguage(Language language) {
 		this.language = language;
 	}
+
 	public PublisherResponse getPublisher() {
 		return publisher;
 	}
+
 	public void setPublisher(PublisherResponse publisher) {
 		this.publisher = publisher;
 	}
+
 	public LocalDate getPublishingDate() {
 		return publishingDate;
 	}
+
 	public void setPublishingDate(LocalDate publishingDate) {
 		this.publishingDate = publishingDate;
 	}
+
 	public String getIsbn() {
 		return isbn;
 	}
+
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
+
 	public Integer getAvailableQuantity() {
 		return availableQuantity;
 	}
+
 	public void setAvailableQuantity(Integer availableQuantity) {
 		this.availableQuantity = availableQuantity;
 	}
+
 	public LocalDate getCreatedAt() {
 		return createdAt;
 	}
+
 	public void setCreatedAt(LocalDate createdAt) {
 		this.createdAt = createdAt;
 	}
+
 	public Boolean getActive() {
 		return active;
 	}
+
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
+
 	public BookDimensions getDimensions() {
 		return dimensions;
 	}
+
 	public void setDimensions(BookDimensions dimensions) {
 		this.dimensions = dimensions;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -197,6 +234,7 @@ public class BookResponse extends EntityModel<BookResponse> {
 		result = prime * result + Objects.hash(id);
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -208,5 +246,5 @@ public class BookResponse extends EntityModel<BookResponse> {
 		BookResponse other = (BookResponse) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 }

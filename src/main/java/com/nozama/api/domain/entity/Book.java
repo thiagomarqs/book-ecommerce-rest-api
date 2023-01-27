@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -121,6 +122,7 @@ public class Book {
 	
 	@NotNull(message="The book's creation date is required.")
 	@PastOrPresent(message="The book's creation date must not be a future date.")
+	@Column(updatable = false)
 	private LocalDate createdAt;
 	
 	@NotNull(message="The book's active status is required.")
