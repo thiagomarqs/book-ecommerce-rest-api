@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import javax.persistence.CascadeType;
@@ -66,10 +66,28 @@ public class Customer implements Serializable {
   )
   private List<CartItem> cartItems = new ArrayList<>();
 
+  @OneToMany(
+    mappedBy = "customer", 
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  private List<Order> orders = new ArrayList<>();
+
+  @OneToMany(
+    mappedBy = "customer", 
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  private List<PaymentMethod> paymentMethods = new ArrayList<>();
+
   @Column(updatable = false)
   private LocalDate registeredAt;
 
   public Customer() {}
+
+  public Customer(Long id) {
+    this.id = id;
+  }
   
   public Customer(
       User user,
@@ -156,16 +174,51 @@ public class Customer implements Serializable {
     cartItems.add(item);
   }
 
-  public Optional<Address> getAddress(Long addressId) {
-    return addresses.stream()
+  public Order getOrder(Long id) {
+    return orders.stream()
+      .filter(o -> o.getId().equals(id))
+      .findFirst()
+      .orElseThrow(() -> new EntityNotFoundException("Order with id " + id + "does not exist."));
+  }
+
+  public List<Order> getOrders() {
+    return orders;
+  }
+
+  public void addOrder(Order order) {
+    order.setCustomer(this);
+    this.orders.add(order);
+  }
+
+  public List<PaymentMethod> getPaymentMethods() {
+    return paymentMethods;
+  }
+
+  public PaymentMethod getPaymentMethod(UUID id) {
+    return paymentMethods
+      .stream()
+      .filter(p -> p.getId().equals(id))
+      .findFirst()
+      .orElseThrow(() -> new EntityNotFoundException("Payment method with id " + id + "does not exist."));
+  }
+
+  public void addPaymentMethod(PaymentMethod method) {
+    method.setCustomer(this);
+    this.paymentMethods.add(method);
+  }
+
+  public Address getAddress(Long addressId) {
+    return addresses
+      .stream()
       .filter(a -> a.getId().equals(addressId))
-      .findFirst();
+      .findFirst()
+      .orElseThrow(() -> new EntityNotFoundException("Address method with id " + id + "does not exist."));
   }
 
   public void deleteAddress(Long addressId) {
     if(!hasAddress(addressId)) throw new EntityNotFoundException("The provided address does not belong to this customer.");
     
-    var address = getAddress(addressId).get();
+    var address = getAddress(addressId);
     var addressType = address.getType();
 
     if(isAddressTheOnlyOneOfItsType(addressType)) { 

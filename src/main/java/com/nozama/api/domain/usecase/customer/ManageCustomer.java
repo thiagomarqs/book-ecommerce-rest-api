@@ -29,7 +29,7 @@ public class ManageCustomer {
     customerRepository.save(customer);
   }
 
-  public Customer findById(Long id) {
+  public Customer find(Long id) {
     return customerRepository
       .findById(id)
       .orElseThrow(() -> new EntityNotFoundException(String.format("Customer with id %d not found.", id)));

@@ -27,8 +27,8 @@ public class BookCreateRequest {
 	private BookDimensions dimensions;
 	private Integer availableQuantity;
 	
-	public BookCreateRequest() {
-	}
+	public BookCreateRequest() {}	
+	
 	public BookCreateRequest(String sku, String title, String description, List<String> imagesUrl, Price price,
 			Set<Long> authorsId, Set<Long> categoriesId, Format format, Integer pages, Language language, Long publisherId,
 			LocalDate publishingDate, String isbn, BookDimensions dimensions, Integer availableQuantity) {

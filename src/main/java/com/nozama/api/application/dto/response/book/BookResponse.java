@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.nozama.api.application.controller.BookController;
 import com.nozama.api.application.dto.response.author.AuthorResponse;
@@ -20,7 +20,7 @@ import com.nozama.api.domain.enums.Language;
 import com.nozama.api.domain.vo.BookDimensions;
 import com.nozama.api.domain.vo.Price;
 
-public class BookResponse extends EntityModel<BookResponse> {
+public class BookResponse extends RepresentationModel<BookResponse> {
 
 	private Long id;
 	private String sku;
@@ -71,7 +71,7 @@ public class BookResponse extends EntityModel<BookResponse> {
 	public BookResponse setLinks() {
 
 		Link self = linkTo(methodOn(BookController.class).findById(this.getId())).withSelfRel();
-		Link all = linkTo(methodOn(BookController.class).findAll()).withRel("authors");
+		Link all = linkTo(methodOn(BookController.class).findAll()).withRel("books");
 
 		Link[] links = {
 				self,

@@ -35,7 +35,7 @@ public class ManageCart {
   }
 
   public List<CartItem> addItem(Long customerId, CartItem itemToAdd) {
-    var customer = manageCustomerUseCase.findById(customerId);
+    var customer = manageCustomerUseCase.find(customerId);
     var cart = customer.getCartItems();
 
     Predicate<CartItem> existingItemWithTheSameBookAsItemToAdd = existing -> existing.getBook().getId().equals(itemToAdd.getBook().getId());
@@ -70,5 +70,9 @@ public class ManageCart {
     if(cartItemId == null) throw new IllegalArgumentException("No id was informed.");
     if(!cartItemRepository.existsById(cartItemId)) throw new EntityNotFoundException("Item with id " + cartItemId + " was not found.");
     if(!cartItemRepository.itemBelongsToCustomer(cartItemId, customerId)) throw new OperationNotAllowedException("This item does not exist in this cart.");
+  }
+
+  public void emptyCart(Long customerId) {
+    cartItemRepository.emptyCart(customerId);
   }
 }

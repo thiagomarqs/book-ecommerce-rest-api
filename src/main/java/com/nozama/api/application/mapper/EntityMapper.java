@@ -18,8 +18,8 @@ public class EntityMapper {
     if (source.size() == 0) return List.of();
 
     return source
-        .stream()
-        .map(s -> this.mapEntity(s, target))
-        .toList();
+      .stream()
+      .map(s -> this.mapEntity(s, target))
+      .toList();
   }
 }

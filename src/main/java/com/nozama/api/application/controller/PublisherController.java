@@ -41,10 +41,15 @@ public class PublisherController {
   @Autowired
   private EntityMapper entityMapper;
 
-  @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
-      MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-  @Operation(summary = "Creates an publisher", description = "Creates an publisher based on the request's body payload.", tags = {
-      "Publisher" })
+  @PostMapping(
+    consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Creates an publisher", 
+    description = "Creates an publisher based on the request's body payload.", 
+    tags = { "Publisher" }
+  )
   public ResponseEntity<PublisherResponse> create(@RequestBody PublisherRequest payload) {
     Publisher publisher = entityMapper.mapEntity(payload, Publisher.class);
 
@@ -59,37 +64,53 @@ public class PublisherController {
     return ResponseEntity.created(uri).body(response);
   }
 
-  @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-  @Operation(summary = "Finds an publisher", description = "Finds an publisher by their Id.", tags = { "Publisher" })
+  @GetMapping(
+    value = "/{id}", 
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Finds an publisher", 
+    description = "Finds an publisher by their Id.", 
+    tags = { "Publisher" }
+  )
   public ResponseEntity<PublisherResponse> findById(@PathVariable(value = "id") Long id) {
     Publisher found = managePublisherUseCase.findById(id);
     PublisherResponse response = entityMapper
-        .mapEntity(found, PublisherResponse.class)
-        .setLinks();
+      .mapEntity(found, PublisherResponse.class)
+      .setLinks();
 
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-  @Operation(summary = "Finds all publishers", description = "Finds all publishers. If no publisher exists, an empty array will be returned.", tags = {
-      "Publisher" })
+  @GetMapping(
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Finds all publishers", 
+    description = "Finds all publishers. If no publisher exists, an empty array will be returned.", 
+    tags = { "Publisher" }
+  )
   public ResponseEntity<List<PublisherResponse>> findAll() {
     List<Publisher> found = managePublisherUseCase.findAll();
     List<PublisherResponse> response = entityMapper
-        .mapList(found, PublisherResponse.class)
-        .stream().map(a -> a.setLinks())
-        .toList();
+      .mapList(found, PublisherResponse.class)
+      .stream().map(a -> a.setLinks())
+      .toList();
 
     return ResponseEntity.ok(response);
   }
 
-  @PutMapping(value = "/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE,
-      MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
-          MediaType.APPLICATION_XML_VALUE })
-  @Operation(summary = "Updates an publisher by their id", description = "Finds an publisher by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", tags = {
-      "Publisher" })
-  public ResponseEntity<PublisherResponse> update(@PathVariable(value = "id") Long id,
-      @RequestBody PublisherRequest payload) {
+  @PutMapping(
+    value = "/{id}", 
+    consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, 
+    produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+  )
+  @Operation(
+    summary = "Updates an publisher by their id", 
+    description = "Finds an publisher by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", 
+    tags = { "Publisher" }
+  )
+  public ResponseEntity<PublisherResponse> update(@PathVariable(value = "id") Long id, @RequestBody PublisherRequest payload) {
     Publisher publisher = entityMapper.mapEntity(payload, Publisher.class);
     publisher.setId(id);
 
@@ -101,14 +122,22 @@ public class PublisherController {
   }
 
   @DeleteMapping("/{id}")
-  @Operation(summary = "Deletes an publisher by their id", description = "Finds an publisher by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", tags = {
-      "Publisher" })
+  @Operation(
+    summary = "Deletes an publisher by their id", 
+    description = "Finds an publisher by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", 
+    tags = { "Publisher" }
+  )
   public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
     managePublisherUseCase.delete(id);
     return ResponseEntity.noContent().build();
   }
 
   @PutMapping(value = "/{id}/active")
+  @Operation(
+    summary = "Activate/Deactivate publisher", 
+    description = "Activates or deactivates a publisher.", 
+    tags = { "Publisher" }
+  )
 	public ResponseEntity<?> active(@PathVariable("id") Long id, @RequestBody PublisherActiveStatusRequest payload) {
 		Boolean active = payload.getActive();
 		managePublisherActiveStatusUseCase.setActive(id, active);

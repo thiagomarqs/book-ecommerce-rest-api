@@ -5,12 +5,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Objects;
 
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.Link;
 
 import com.nozama.api.application.controller.AuthorController;
 
-public class AuthorResponse extends EntityModel<AuthorResponse> {
+public class AuthorResponse extends RepresentationModel<AuthorResponse> {
 
     private Long id;
     private String name;

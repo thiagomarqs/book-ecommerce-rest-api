@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -77,8 +78,9 @@ public class AuthenticationController {
 
     manageCustomerUseCase.register(customer, user);
 
-    return ResponseEntity.ok().build();
-    
+    final var uri = Link.of("/api/auth/login").toUri();
+
+    return ResponseEntity.created(uri).body(null);
   }
 
   @PostMapping(

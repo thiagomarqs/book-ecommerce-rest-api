@@ -3,16 +3,15 @@ package com.nozama.api.application.dto.response.cartItem;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.Link;
 
-import com.nozama.api.application.dto.response.book.BookResponse;
 import com.nozama.api.domain.enums.Currency;
 
-public class CartItemResponse extends EntityModel<CartItemResponse> {
+public class CartItemResponse extends RepresentationModel<CartItemResponse> {
 
   private Long id;
-  private BookResponse book;
+  private Long bookId;
   private BigDecimal price;
   private Integer units;
   private BigDecimal subTotal;
@@ -24,7 +23,8 @@ public class CartItemResponse extends EntityModel<CartItemResponse> {
 
     Link self = Link.of("/{customerId}/cart/items/{itemId}");
     Link all = Link.of("/{customerId}/cart/");
-    Link[] links = { self, all};
+    Link book = Link.of("/books/" + bookId);
+    Link[] links = { self, all, book };
 
     this.add(links);
 
@@ -37,14 +37,6 @@ public class CartItemResponse extends EntityModel<CartItemResponse> {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public BookResponse getBook() {
-    return book;
-  }
-
-  public void setBook(BookResponse book) {
-    this.book = book;
   }
 
   public BigDecimal getPrice() {
@@ -93,6 +85,14 @@ public class CartItemResponse extends EntityModel<CartItemResponse> {
 
   public void setModifiedAt(LocalDateTime modifiedAt) {
     this.modifiedAt = modifiedAt;
+  }
+
+  public Long getBookId() {
+    return bookId;
+  }
+
+  public void setBookId(Long bookId) {
+    this.bookId = bookId;
   }
 
 }

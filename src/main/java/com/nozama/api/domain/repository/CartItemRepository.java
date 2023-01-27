@@ -27,4 +27,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
   @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM CartItem c WHERE c.id = :cartItemId AND c.customer.id = :customerId")
   boolean itemBelongsToCustomer(Long cartItemId, Long customerId);
 
+  @Transactional
+  @Modifying(clearAutomatically = true)
+  @Query("DELETE CartItem c WHERE c.customer.id = :customerId")
+  int emptyCart(Long customerId);
+
 }

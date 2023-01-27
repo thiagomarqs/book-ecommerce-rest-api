@@ -51,7 +51,7 @@ public class ManageCartTest {
     final var item = new CartItem();
     
     var customer = new Customer();
-    when(manageCustomer.findById(anyLong())).thenReturn(customer);
+    when(manageCustomer.find(anyLong())).thenReturn(customer);
 
     assertEquals(0, customer.getCartItems().size());
 
@@ -70,7 +70,7 @@ public class ManageCartTest {
     final var book = new Book();
     var customer = new Customer();
     
-    when(manageCustomer.findById(anyLong())).thenReturn(customer);
+    when(manageCustomer.find(anyLong())).thenReturn(customer);
 
     book.setId(1L);
     book.setPrice(new Price(new BigDecimal(29.99), Currency.BRL));
@@ -84,7 +84,7 @@ public class ManageCartTest {
     itemToAdd.setBook(book);
     itemToAdd.setUnits(2);
 
-    when(manageCustomer.findById(anyLong())).thenReturn(customer);
+    when(manageCustomer.find(anyLong())).thenReturn(customer);
 
     assertThrows(
       OperationNotAllowedException.class, 

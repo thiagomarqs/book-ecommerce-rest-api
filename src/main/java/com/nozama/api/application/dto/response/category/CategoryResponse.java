@@ -5,12 +5,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Objects;
 
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.RepresentationModel;
 
 import com.nozama.api.application.controller.CategoryController;
 
-public class CategoryResponse extends EntityModel<CategoryResponse>{
+public class CategoryResponse extends RepresentationModel<CategoryResponse>{
 	
 	private Long id;
 	private String name;

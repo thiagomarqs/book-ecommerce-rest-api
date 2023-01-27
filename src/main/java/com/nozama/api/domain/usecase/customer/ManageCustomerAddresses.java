@@ -44,7 +44,7 @@ public class ManageCustomerAddresses {
   }
 
   public List<Address> updateAddress(Long customerId, Address updatedAddress) {
-    final var addressToUpdate = findAddress(customerId, updatedAddress.getId());
+    final var addressToUpdate = find(customerId, updatedAddress.getId());
     
     updatedAddress.setCustomer(addressToUpdate.getCustomer());
     updatedAddress.setCreatedAt(addressToUpdate.getCreatedAt());
@@ -54,10 +54,10 @@ public class ManageCustomerAddresses {
     return customerRepository.findAddressesByCustomerId(customerId);
   }
 
-  public Address findAddress(Long customerId, Long addressId) {
+  public Address find(Long customerId, Long addressId) {
     final var customer = findCustomerById(customerId);
     
-    return customer.getAddress(addressId).orElseThrow(() -> new EntityNotFoundException("The provided address does not belong to this customer."));
+    return customer.getAddress(addressId);
   }
 
   public List<Address> findAllAddresses(Long customerId) {

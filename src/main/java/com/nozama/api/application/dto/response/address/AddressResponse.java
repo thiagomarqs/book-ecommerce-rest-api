@@ -5,13 +5,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDate;
 
-import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.Link;
 
 import com.nozama.api.application.controller.CustomerController;
 import com.nozama.api.domain.enums.AddressType;
 
-public class AddressResponse extends EntityModel<AddressResponse> {
+public class AddressResponse extends RepresentationModel<AddressResponse> {
   private Long id;
   private Long customerId;
   private AddressType type;
