@@ -23,6 +23,7 @@ import com.nozama.api.domain.entity.Author;
 import com.nozama.api.domain.usecase.author.ManageAuthor;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -46,9 +47,9 @@ public class AuthorController {
     @Operation(
         summary = "Creates an author",
         description = "Creates an author based on the request's body payload.",
-        tags = { "Author" }
+        tags = { "Admin", "Author" }
     )
-    public ResponseEntity<AuthorResponse> create(@RequestBody AuthorRequest payload) {
+    public ResponseEntity<AuthorResponse> create(@RequestBody @Parameter(description = "The new author.") AuthorRequest payload) {
         Author author = entityMapper.mapEntity(payload, Author.class);
 
         author = manageAuthorUseCase.create(author);
@@ -71,7 +72,7 @@ public class AuthorController {
         description = "Finds an author by their Id.",
         tags = { "Author" }
     )
-    public ResponseEntity<AuthorResponse> findById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<AuthorResponse> findById(@PathVariable(value = "id") @Parameter(description = "The author's id.") Long id) {
         Author found = manageAuthorUseCase.findById(id);
         AuthorResponse response = entityMapper
             .mapEntity(found, AuthorResponse.class)
@@ -106,9 +107,9 @@ public class AuthorController {
     @Operation(
         summary = "Updates an author by their id",
         description = "Finds an author by the provided id and updates it. If the provided id is invalid, an exception will be thrown.",
-        tags = { "Author" }
+        tags = { "Admin", "Author" }
     )
-    public ResponseEntity<AuthorResponse> update(@PathVariable(value = "id") Long id, @RequestBody AuthorRequest payload) {
+    public ResponseEntity<AuthorResponse> update(@PathVariable(value = "id") @Parameter(description = "The id of the author to be updated.") Long id, @RequestBody @Parameter(description = "The new information of the author.") AuthorRequest payload) {
         Author author = entityMapper.mapEntity(payload, Author.class);
         author.setId(id);
 
@@ -123,9 +124,9 @@ public class AuthorController {
     @Operation(
         summary = "Deletes an author by their id",
         description = "Finds an author by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.",
-        tags = { "Author" }
+        tags = { "Admin", "Author" }
     )
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> delete(@PathVariable(value = "id") @Parameter(description = "The id of the author.") Long id) {
         manageAuthorUseCase.delete(id);
         return ResponseEntity.noContent().build();
     }

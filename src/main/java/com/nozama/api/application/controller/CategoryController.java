@@ -25,6 +25,7 @@ import com.nozama.api.domain.entity.Category;
 import com.nozama.api.domain.usecase.category.ManageCategory;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -50,9 +51,9 @@ public class CategoryController {
   @Operation(
     summary = "Creates an category", 
     description = "Creates an category based on the request's body payload.", 
-    tags = { "Category" }
+    tags = { "Admin", "Category" }
   )
-  public ResponseEntity<CategoryResponse> create(@RequestBody CategoryRequest payload) {
+  public ResponseEntity<CategoryResponse> create(@RequestBody @Parameter(description = "The new category") CategoryRequest payload) {
     Category category = entityMapper.mapEntity(payload, Category.class);
 
     category = manageCategoryUseCase.create(category);
@@ -73,7 +74,7 @@ public class CategoryController {
     description = "Finds an category by its Id.", 
     tags = { "Category" }
   )
-  public ResponseEntity<CategoryResponse> findById(@PathVariable(value = "id") Long id) {
+  public ResponseEntity<CategoryResponse> findById(@PathVariable(value = "id") @Parameter(description = "The id of the category.") Long id) {
     Category found = manageCategoryUseCase.findById(id);
     CategoryResponse response = entityMapper.mapEntity(found, CategoryResponse.class).setLinks();
 
@@ -104,9 +105,9 @@ public class CategoryController {
   @Operation(
     summary = "Updates an category by its id", 
     description = "Finds an category by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", 
-    tags = { "Category" }
+    tags = { "Admin", "Category" }
   )
-  public ResponseEntity<CategoryResponse> update(@PathVariable(value = "id") Long id, @RequestBody CategoryRequest payload) {
+  public ResponseEntity<CategoryResponse> update(@PathVariable(value = "id") @Parameter(description = "The id of the category.") Long id, @RequestBody @Parameter(description = "The new information of the category.") CategoryRequest payload) {
     Category category = entityMapper.mapEntity(payload, Category.class);
     category.setId(id);
 
@@ -121,9 +122,9 @@ public class CategoryController {
   @Operation(
     summary = "Deletes an category by its id", 
     description = "Finds an category by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", 
-    tags = { "Category" }
+    tags = { "Admin", "Category" }
   )
-  public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+  public ResponseEntity<?> delete(@PathVariable(value = "id") @Parameter(description = "The id of the category") Long id) {
     manageCategoryUseCase.delete(id);
     return ResponseEntity.noContent().build();
   }
