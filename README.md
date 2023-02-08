@@ -1,12 +1,15 @@
 <p float="left">
-  <img src="https://img.shields.io/badge/status-development-yellow"/>
+  <img src="https://img.shields.io/badge/status-finished-green"/>
   <img src="https://img.shields.io/github/last-commit/thiagomarqs/book-ecommerce-rest-api"/>
   <img src="https://img.shields.io/github/commit-activity/m/thiagomarqs/book-ecommerce-rest-api"/>
 </p>
 
 # Book e-commerce REST API
 REST API built with Spring Boot for a fictional online book store called "Nozama" (yes, "Amazon" but backwards).  
-I'm using this project to study back-end development with Java and Spring Boot, as well as to practice some other development concepts (such as TDD, API documentation, Clean Code...) and strength my skills.
+I used this project to study back-end development with Java, Spring Boot, Docker, Azure, as well as to practice some other development concepts (such as TDD, API documentation, Clean Code...) and strength my skills.  
+
+## Documentation
+The Swagger documentation was built using [Springdoc](https://springdoc.org/) and it's available at `https://nozama.azurewebsites.net/swagger-ui/index.html`  
 
 ## The Idea
 This project's intent is to simulate an e-commerce, by allowing the Admins to manage the store's products catalog, and by allowing users to view the catalog, add items to their cart, make orders and purchase the books.
@@ -33,10 +36,19 @@ Basically, this is the structure:
 - Infrastructure:
   * Any configuration required by the Spring and the libraries used.
 
+## Running on your machine
+| Step | Command |
+| :------ | :----- |
+| 1. Install dependencies | `mvn clean install -DskipTests` |
+| 2. Build | `mvn package -DskipTests` |
+| 3. Run | `mvn spring-boot:run` |
+
 ## Technologies Used
-So far, these technologies have been used:  
+These technologies were used:  
 - Java 17 LTS with Maven
 - Spring Boot
+- Docker
+- Azure
 - Hibernate
 - Spring Data JPA
 - Spring Security
@@ -47,9 +59,3 @@ So far, these technologies have been used:
 - Springdoc
 
 The full list of dependencies can be checked out in this project's pom.xml file.
-
-## Running the project
-This project uses Maven. Therefore, after having cloned the project and installed the dependencies, run `mvn spring-boot:run` to execute the project in your local environment.
-
-## Documentation
-The Swagger documentation was built using [Springdoc](https://springdoc.org/) and it's available at http://localhost:8080/swagger-ui.html
