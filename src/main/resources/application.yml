@@ -1,25 +1,19 @@
 ﻿spring:
   profiles:
-    active: dev
+    active: prod
   flyway:
-    enabled: true
-    validate-on-migrate: true
-  security:
-    user:
-      name: user
-      password: user
+    enabled: false
+    validate-on-migrate: false
   jpa:
     defer-datasource-initialization: true
 hibernate:
   physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 jpa:
   database-platform: org.hibernate.dialect.H2Dialect
-security:
-  jwt:
-    expiration: 3600000
-    secret: ExtremelySecureAndLengthyPasswordThatReallyProtects123
 server:
   error:
+    whitelabel:
+      enabled: false
     include-message: always
     include-binding-errors: always
     include-exception: false
