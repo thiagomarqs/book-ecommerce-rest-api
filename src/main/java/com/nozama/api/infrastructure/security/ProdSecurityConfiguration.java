@@ -20,8 +20,8 @@ import com.nozama.api.domain.enums.RoleName;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Profile("dev")
-public class SecurityConfiguration {
+@Profile("prod")
+public class ProdSecurityConfiguration {
 
 	@Autowired
 	private JwtFilter jwtFilter;
@@ -32,7 +32,6 @@ public class SecurityConfiguration {
 			.authorizeHttpRequests()
 				.antMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll()
 				.antMatchers("/api/customers/**").hasAnyRole(RoleName.CUSTOMER.name(), RoleName.ADMIN.name())
-				.antMatchers("/h2-console/**").permitAll()
 				.antMatchers(HttpMethod.GET).permitAll()
 				.anyRequest().hasRole(RoleName.ADMIN.name())
 			.and()

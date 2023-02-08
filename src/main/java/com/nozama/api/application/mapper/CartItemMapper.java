@@ -15,9 +15,6 @@ public class CartItemMapper {
 
   @Autowired
   private EntityMapper mapper;
-
-  @Autowired
-  private BookMapper bookMapper;
   
   public CartItem toCartItem(CartItemRequest request, Book book) {
     var mapped = new CartItem();

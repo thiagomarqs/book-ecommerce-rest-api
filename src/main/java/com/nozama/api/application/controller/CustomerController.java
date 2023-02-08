@@ -1,16 +1,12 @@
 package com.nozama.api.application.controller;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +29,6 @@ import com.nozama.api.application.dto.response.address.AddressResponse;
 import com.nozama.api.application.dto.response.cartItem.CartItemResponse;
 import com.nozama.api.application.dto.response.order.OrderResponse;
 import com.nozama.api.application.dto.response.paymentMethod.PaymentMethodResponse;
-import com.nozama.api.application.mapper.AddressMapper;
 import com.nozama.api.application.mapper.CartItemMapper;
 import com.nozama.api.application.mapper.EntityMapper;
 import com.nozama.api.domain.entity.Address;
@@ -46,12 +41,13 @@ import com.nozama.api.domain.usecase.order.MakeOrder;
 import com.nozama.api.domain.usecase.order.ManageOrder;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/customers")
 @Tag(
-	name = "Author", 
+	name = "Customer", 
 	description = "Operations for managing customers."
 )
 public class CustomerController {
@@ -70,9 +66,6 @@ public class CustomerController {
 
   @Autowired
   private EntityMapper entityMapper;
-
-  @Autowired
-  private AddressMapper addressMapper;
 
   @Autowired
   private CartItemMapper cartItemMapper;
@@ -95,11 +88,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "All addresses",
-    description = "Gets all the addresses of a customer.",
+    description = "Gets all the addresses of a customer. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Address" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<AddressResponse>> findAddresses(@PathVariable(value = "id") Long customerId) {
+  public ResponseEntity<CollectionModel<AddressResponse>> findAddresses(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId) {
     final var customerAddresses = manageCustomerAddressesUseCase.getAddresses(customerId);
     final var list = entityMapper.mapList(customerAddresses, AddressResponse.class);
     Link[] links = {
@@ -119,11 +112,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Find address.",
-    description = "Finds an address of a customer.",
+    description = "Finds an address of a customer. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Address" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<AddressResponse> findAddress(@PathVariable(value = "id") Long customerId, @PathVariable(value = "addressId") Long addressId) {
+  public ResponseEntity<AddressResponse> findAddress(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(value = "addressId") @Parameter(description = "The id of the address.") Long addressId) {
     final var address = manageCustomerAddressesUseCase.find(customerId, addressId);
     final var response = entityMapper.mapEntity(address, AddressResponse.class).setLinks();
 
@@ -137,11 +130,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "New address.",
-    description = "Adds a new address to a customer. Returns all the addresses of the customer after the addition.",
+    description = "Adds a new address to a customer. Returns all the addresses of the customer after the addition. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Address" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<AddressResponse>> addAddress(@PathVariable(value = "id") Long customerId, @RequestBody AddressCreateRequest addressRequest) {
+  public ResponseEntity<CollectionModel<AddressResponse>> addAddress(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @RequestBody @Parameter(description = "The new address.") AddressCreateRequest addressRequest) {
     final var address = entityMapper.mapEntity(addressRequest, Address.class);
     final var addresses = manageCustomerAddressesUseCase.addAddress(customerId, address);
     final var list = entityMapper.mapList(addresses, AddressResponse.class);
@@ -163,11 +156,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Update address.",
-    description = "Updates an existing address of a customer. Returns all the addresses of the customer after the update.",
+    description = "Updates an existing address of a customer. Returns all the addresses of the customer after the update. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Address" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<AddressResponse>> updateAddress(@PathVariable(value = "id") Long customerId, @PathVariable(value = "addressId") Long addressId, @RequestBody AddressUpdateRequest addressRequest) {
+  public ResponseEntity<CollectionModel<AddressResponse>> updateAddress(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(value = "addressId") @Parameter(description = "The new information of the address.") Long addressId, @RequestBody AddressUpdateRequest addressRequest) {
     final var address = entityMapper.mapEntity(addressRequest, Address.class);
     address.setId(addressId);    
 
@@ -189,11 +182,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Delete address.",
-    description = "Deletes an address from a customer. If the address is the only one of its type (eg.: the customer's only billing address), it cannot be deleted.",
+    description = "Deletes an address from a customer. If the address is the only one of its type (eg.: the customer's only billing address), it cannot be deleted. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Address" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<?> deleteAddress(@PathVariable(value = "id") Long customerId, @PathVariable(value = "addressId") Long addressId) {
+  public ResponseEntity<?> deleteAddress(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(value = "addressId") @Parameter(description = "The id of the address.") Long addressId) {
     manageCustomerAddressesUseCase.deleteAddress(customerId, addressId);
     return ResponseEntity.ok().build();
   }
@@ -206,11 +199,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Get Cart.",
-    description = "Gets all items in the customer's cart.",
+    description = "Gets all items in the customer's cart. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Cart" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<CartItemResponse>> getCart(@PathVariable(value = "id") Long customerId) {
+  public ResponseEntity<CollectionModel<CartItemResponse>> getCart(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId) {
     final var cart = manageCartUseCase.getCart(customerId);
     final var list = entityMapper.mapList(cart, CartItemResponse.class);
     final Link[] links = {
@@ -229,11 +222,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Get one Item.",
-    description = "Gets a cart item by its id.",
+    description = "Gets a cart item by its id. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Cart" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CartItemResponse> getCartItem(@PathVariable(value = "id") Long customerId, @PathVariable(value = "itemId") Long cartItemId) {
+  public ResponseEntity<CartItemResponse> getCartItem(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(value = "itemId") @Parameter(description = "The id of the cart item.") Long cartItemId) {
     var item = manageCartUseCase.getItem(customerId, cartItemId);
     var response = cartItemMapper.toCartItemResponse(item).setLinks();
     return ResponseEntity.ok(response);
@@ -246,11 +239,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Add item to cart.",
-    description = "Adds an item to the customers' cart and returns all items if the operation is successful. If the book contained in the item was already added, the operation will fail.",
+    description = "Adds an item to the customers' cart and returns all items if the operation is successful. If the book contained in the item was already added, the operation will fail. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Cart" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<CartItemResponse>> addItemToCart(@PathVariable(value = "id") Long customerId, @RequestBody CartItemRequest request) {
+  public ResponseEntity<CollectionModel<CartItemResponse>> addItemToCart(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @RequestBody @Parameter(description = "The information of the item to add to the cart.") CartItemRequest request) {
     final var book = manageBookUseCase.findById(request.getBookId());
     final var item = cartItemMapper.toCartItem(request, book);
     final var cart = manageCartUseCase.addItem(customerId, item);
@@ -272,11 +265,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Delete Item.",
-    description = "Deletes an item from the cart. Fails if the provided id does not exist.",
+    description = "Deletes an item from the cart. Fails if the provided id does not exist. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Cart" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<?> deleteItemFromCart(@PathVariable(value = "id") Long customerId, @PathVariable(value = "itemId") Long itemId) {
+  public ResponseEntity<?> deleteItemFromCart(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(value = "itemId") @Parameter(description = "The id of the cart item.") Long itemId) {
     manageCartUseCase.deleteItem(customerId, itemId);
     return ResponseEntity.ok().build();
   }
@@ -288,11 +281,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Update Item Units.",
-    description = "Updates the units of an item of the cart. Fails if the provided id does not exist or if the new unit is not greater than 0.",
+    description = "Updates the units of an item of the cart. Fails if the provided id does not exist or if the new unit is not greater than 0. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Cart" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CartItemResponse> updateCartItemUnits(@PathVariable(value = "id") Long customerId, @PathVariable(value = "itemId") Long itemId, @RequestBody @Valid UpdateCartItemUnitsRequest request) {
+  public ResponseEntity<CartItemResponse> updateCartItemUnits(@PathVariable(value = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(value = "itemId") @Parameter(description = "The id of the cart item.") Long itemId, @RequestBody @Valid @Parameter(description = "The new units of the cart item.") UpdateCartItemUnitsRequest request) {
     var newUnits = request.getUnits();
     var item = manageCartUseCase.updateCartItemUnits(customerId, itemId, newUnits);
     var response = cartItemMapper.toCartItemResponse(item).setLinks();
@@ -307,11 +300,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Add Payment Method.",
-    description = "Add a new payment method to the customer account.",
+    description = "Add a new payment method to the customer account. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Payments" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<?> addPaymentMethod(@PathVariable(name = "id") Long customerId, @RequestBody PaymentMethodRequest request) {
+  public ResponseEntity<?> addPaymentMethod(@PathVariable(name = "id") @Parameter(description = "The id of the customer.") Long customerId, @RequestBody @Parameter(description = "The new payment method.") PaymentMethodRequest request) {
     var paymentMethod = entityMapper.mapEntity(request, PaymentMethod.class);
     
     manageCustomerPaymentMethodsUseCase.add(customerId, paymentMethod);
@@ -326,11 +319,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Delete Payment Method.",
-    description = "Deletes a payment method from the customer account.",
+    description = "Deletes a payment method from the customer account. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Payments" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<?> deletePaymentMethod(@PathVariable(name = "id") Long customerId, @PathVariable(name = "paymentMethodId") UUID paymentMethodId) {
+  public ResponseEntity<?> deletePaymentMethod(@PathVariable(name = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(name = "paymentMethodId") @Parameter(description = "The id of the payment method. Differently from all other entities, the ID is in a 128-bit lowercase UUID format.") UUID paymentMethodId) {
     manageCustomerPaymentMethodsUseCase.delete(customerId, paymentMethodId);
     return ResponseEntity.ok().build();
   }
@@ -341,11 +334,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Get All Payment Methods.",
-    description = "Gets all payment methods from the customer account.",
+    description = "Gets all payment methods from the customer account. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Payments" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<PaymentMethodResponse>> getPaymentMethods(@PathVariable(name = "id") Long customerId) {
+  public ResponseEntity<CollectionModel<PaymentMethodResponse>> getPaymentMethods(@PathVariable(name = "id") @Parameter(description = "The id of the customer.") Long customerId) {
     final var methods = manageCustomerPaymentMethodsUseCase.getAll(customerId);
     final var list = entityMapper.mapList(methods, PaymentMethodResponse.class);
     final Link[] links = {
@@ -365,11 +358,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "All orders",
-    description = "Finds all orders of a customer.",
+    description = "Finds all orders of a customer. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Orders" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<CollectionModel<OrderResponse>> allOrders(@PathVariable(name = "id") Long customerId) { 
+  public ResponseEntity<CollectionModel<OrderResponse>> allOrders(@PathVariable(name = "id") @Parameter(description = "The id of the customer.") Long customerId) { 
     final var orders = manageOrderUseCase.findAll(customerId);
     final var list = entityMapper.mapList(orders, OrderResponse.class);
     final Link[] links = {
@@ -387,11 +380,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "Find order",
-    description = "Finds an order by its id",
+    description = "Finds an order by its id. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Orders" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<OrderResponse> find(@PathVariable(name = "id") Long customerId, @PathVariable(name = "orderId") Long orderId) { 
+  public ResponseEntity<OrderResponse> find(@PathVariable(name = "id") @Parameter(description = "The id of the customer.") Long customerId, @PathVariable(name = "orderId") @Parameter(description = "The id of the order.") Long orderId) { 
     final var order = manageOrderUseCase.find(customerId, orderId);
     final Link[] links = {
       getCustomerLink(customerId),
@@ -410,11 +403,11 @@ public class CustomerController {
   )
   @Operation(
     summary = "New order",
-    description = "Makes a new order for the customer. All the items present in the cart will be included in the order. The request requires the payment method (yes, I know that in a real scenario this would be different) and the address. If, for some reason, making the order was not possible, a relevant error will be provided.",
+    description = "Makes a new order for the customer. All the items present in the cart will be included in the order. The request requires the payment method (yes, I know that in a real scenario this would be different) and the address. If, for some reason, making the order was not possible, a relevant error will be provided. Accessible only by authenticated customers. Each customer can see only their data.",
     tags = { "Customer", "Orders" }
   )
   @PreAuthorize("#customerId == principal.id")
-  public ResponseEntity<OrderResponse> newOrder(@PathVariable(name = "id") Long customerId, @RequestBody OrderRequest request) { 
+  public ResponseEntity<OrderResponse> newOrder(@PathVariable(name = "id") @Parameter(description = "The id of the customer.") Long customerId, @RequestBody @Parameter(description = "The information of the new order.") OrderRequest request) { 
     final var order = makeOrderUseCase.execute(customerId, request);
     final Link[] links = {
       getCustomerLink(customerId),

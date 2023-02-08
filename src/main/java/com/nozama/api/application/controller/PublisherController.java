@@ -25,6 +25,7 @@ import com.nozama.api.domain.usecase.publisher.ManagePublisher;
 import com.nozama.api.domain.usecase.publisher.ManagePublisherActiveStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -48,9 +49,9 @@ public class PublisherController {
   @Operation(
     summary = "Creates an publisher", 
     description = "Creates an publisher based on the request's body payload.", 
-    tags = { "Publisher" }
+    tags = { "Admin", "Publisher" }
   )
-  public ResponseEntity<PublisherResponse> create(@RequestBody PublisherRequest payload) {
+  public ResponseEntity<PublisherResponse> create(@RequestBody @Parameter(description = "The new publisher") PublisherRequest payload) {
     Publisher publisher = entityMapper.mapEntity(payload, Publisher.class);
 
     publisher = managePublisherUseCase.create(publisher);
@@ -73,7 +74,7 @@ public class PublisherController {
     description = "Finds an publisher by their Id.", 
     tags = { "Publisher" }
   )
-  public ResponseEntity<PublisherResponse> findById(@PathVariable(value = "id") Long id) {
+  public ResponseEntity<PublisherResponse> findById(@PathVariable(value = "id") @Parameter(description = "The id of the publisher") Long id) {
     Publisher found = managePublisherUseCase.findById(id);
     PublisherResponse response = entityMapper
       .mapEntity(found, PublisherResponse.class)
@@ -108,9 +109,9 @@ public class PublisherController {
   @Operation(
     summary = "Updates an publisher by their id", 
     description = "Finds an publisher by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", 
-    tags = { "Publisher" }
+    tags = { "Admin", "Publisher" }
   )
-  public ResponseEntity<PublisherResponse> update(@PathVariable(value = "id") Long id, @RequestBody PublisherRequest payload) {
+  public ResponseEntity<PublisherResponse> update(@PathVariable(value = "id") @Parameter(description = "The id of the publisher.") Long id, @RequestBody @Parameter(description = "The new information of the publisher.") PublisherRequest payload) {
     Publisher publisher = entityMapper.mapEntity(payload, Publisher.class);
     publisher.setId(id);
 
@@ -125,9 +126,9 @@ public class PublisherController {
   @Operation(
     summary = "Deletes an publisher by their id", 
     description = "Finds an publisher by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", 
-    tags = { "Publisher" }
+    tags = { "Admin", "Publisher" }
   )
-  public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+  public ResponseEntity<?> delete(@PathVariable(value = "id") @Parameter(description = "The id of the publisher.") Long id) {
     managePublisherUseCase.delete(id);
     return ResponseEntity.noContent().build();
   }
@@ -136,9 +137,9 @@ public class PublisherController {
   @Operation(
     summary = "Activate/Deactivate publisher", 
     description = "Activates or deactivates a publisher.", 
-    tags = { "Publisher" }
+    tags = { "Admin", "Publisher" }
   )
-	public ResponseEntity<?> active(@PathVariable("id") Long id, @RequestBody PublisherActiveStatusRequest payload) {
+	public ResponseEntity<?> active(@PathVariable("id") @Parameter(description = "The id of the publisher.") Long id, @RequestBody @Parameter(description = "The new active status of the publisher.") PublisherActiveStatusRequest payload) {
 		Boolean active = payload.getActive();
 		managePublisherActiveStatusUseCase.setActive(id, active);
 		return ResponseEntity.noContent().build();

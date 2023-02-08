@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.nozama.api.domain.entity.Order;
-import com.nozama.api.domain.exception.EntityNotFoundException;
-import com.nozama.api.domain.repository.CustomerRepository;
 import com.nozama.api.domain.repository.OrderRepository;
 import com.nozama.api.domain.usecase.customer.ManageCustomer;
 

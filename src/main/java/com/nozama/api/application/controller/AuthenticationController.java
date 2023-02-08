@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +28,13 @@ import com.nozama.api.domain.entity.builder.UserBuilder;
 import com.nozama.api.domain.usecase.customer.ManageCustomer;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Authentication", description = "Operations for authentication.")
+@Profile("prod")
 public class AuthenticationController {
 
   @Autowired
@@ -53,10 +56,10 @@ public class AuthenticationController {
   )
   @Operation(
     summary = "Registers a new customer.",
-    description = "Registers a new customer with the provided information. A user and a profile will be created for this new customer.",
+    description = "Registers a new customer with the provided information. A user will be created for this new customer.",
     tags = { "Authentication" }
   )
-  public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest request) {
+  public ResponseEntity<?> register(@RequestBody @Valid @Parameter(description = "The registration request. Contains all the necessary details to register a new customer.")  RegistrationRequest request) {
     
     var encodedPassword = encoder.encode(request.getPassword());
 
@@ -93,7 +96,7 @@ public class AuthenticationController {
     description = "Logs in a customer. If the provided credentials aren't valid, an exception will be thrown.",
     tags = { "Authentication" }
   )
-  public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
+  public ResponseEntity<LoginResponse> login(@RequestBody @Valid @Parameter(description = "The user's e-mail and password.") LoginRequest request) {
     var authRequest = new UsernamePasswordAuthenticationToken(
       request.getEmail(),
       request.getPassword()

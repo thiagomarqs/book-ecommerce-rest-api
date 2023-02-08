@@ -40,6 +40,7 @@ import com.nozama.api.domain.usecase.book.ManageBook;
 import com.nozama.api.domain.usecase.book.ManageBookActiveStatus;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -88,9 +89,9 @@ public class BookController {
 	@Operation(
 		summary = "Creates an book", 
 		description = "Creates an book based on the request body payload.", 
-		tags = { "Book" }
+		tags = { "Admin", "Book" }
 	)
-	public ResponseEntity<BookResponse> create(@RequestBody BookCreateRequest payload) {
+	public ResponseEntity<BookResponse> create(@RequestBody @Parameter(description = "The new book.") BookCreateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId()
 			.stream()
@@ -132,7 +133,7 @@ public class BookController {
 		description = "Finds an book by its Id.", 
 		tags = { "Book" }
 	)
-	public ResponseEntity<BookResponse> findById(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<BookResponse> findById(@PathVariable(value = "id") @Parameter(description = "The id of the book.") Long id) {
 		Book found = manageBookUseCase.findById(id);
 		BookResponse response = entityMapper.mapEntity(found, BookResponse.class).setLinks();
 
@@ -164,9 +165,9 @@ public class BookController {
 	@Operation(
 		summary = "Updates an book by its id", 
 		description = "Finds an book by the provided id and updates it. If the provided id is invalid, an exception will be thrown.", 
-		tags = { "Book" }
+		tags = { "Admin", "Book" }
 	)
-	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") Long id, @RequestBody BookUpdateRequest payload) {
+	public ResponseEntity<BookResponse> update(@PathVariable(value = "id") @Parameter(description = "The id of the book.") Long id, @RequestBody @Parameter(description = "The new information of the book.") BookUpdateRequest payload) {
 		
 		Set<Category> categories = payload.getCategoriesId().stream()
 			.map(category -> categoryRepository.findById(category)
@@ -200,15 +201,20 @@ public class BookController {
 	@Operation(
 		summary = "Deletes an book by its id", 
 		description = "Finds an book by the provided id and deletes it. If the provided id is invalid, an exception will be thrown.", 
-		tags = { "Book" }
+		tags = { "Admin", "Book" }
 	)
-	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<?> delete(@PathVariable(value = "id") @Parameter(description = "The id of the book.") Long id) {
 		manageBookUseCase.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping(value = "/{id}/active")
-	public ResponseEntity<?> active(@PathVariable("id") Long id, @RequestBody BookActiveStatusRequest payload) {
+	@Operation(
+		summary = "Changes the active status of a book", 
+		description = "Given a valid book id, changes the active status of it with the new one informed in the request body.", 
+		tags = { "Admin", "Book" }
+	)
+	public ResponseEntity<?> active(@PathVariable("id") @Parameter(description = "The id of the book.") Long id, @RequestBody @Parameter(description = "The new active status.") BookActiveStatusRequest payload) {
 		Boolean active = payload.getActive();
 		manageBookActiveStatusUseCase.setActive(id, active);
 		return ResponseEntity.noContent().build();
