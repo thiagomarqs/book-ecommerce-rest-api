@@ -1,6 +1,6 @@
 ﻿spring:
   profiles:
-    active: prod
+    active: dev
   flyway:
     enabled: false
     validate-on-migrate: false
