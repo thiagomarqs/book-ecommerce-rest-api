@@ -9,7 +9,7 @@ REST API built with Spring Boot for a fictional online book store called "Nozama
 I used this project to study back-end development with Java, Spring Boot, Docker, Azure, as well as to practice some other development concepts (such as TDD, API documentation, Clean Code...) and strength my skills.  
 
 ## Documentation
-The Swagger documentation was built using [Springdoc](https://springdoc.org/) and it's available at `https://nozama.azurewebsites.net/swagger-ui/index.html`  
+The Swagger documentation was built using [Springdoc](https://springdoc.org/) and it's available at https://nozama.azurewebsites.net/swagger-ui/index.html  
 
 ## The Idea
 This project's intent is to simulate an e-commerce, by allowing the Admins to manage the store's products catalog, and by allowing users to view the catalog, add items to their cart, make orders and purchase the books.
