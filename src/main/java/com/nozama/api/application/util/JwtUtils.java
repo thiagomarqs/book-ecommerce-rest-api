@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 @Component
+@Profile("prod")
 public class JwtUtils {
 
   @Value("${security.jwt.secret}")
@@ -27,7 +29,10 @@ public class JwtUtils {
 
     var splitted = authorizationHeaderValue.split(" ");
 
-    return splitted[0].equals("Bearer") && !splitted[1].isBlank();
+    var startsWithBearer = splitted[0].equals("Bearer");
+    var hasToken = !splitted[1].isBlank();
+
+    return startsWithBearer && hasToken;
   }
 
   public static String extractTokenFromAuthorizationHeaderValue(String authorizationHeaderValue) {
