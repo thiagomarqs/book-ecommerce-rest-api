@@ -37,6 +37,8 @@ public class Payment {
   private LocalDateTime createdAt;
   
   private LocalDateTime modifiedAt;
+
+  public Payment() {}
   
   public Payment(Order order, PaymentMethod paymentMethod, BigDecimal amountPaid, PaymentStatus status) {
     this.order = order;
