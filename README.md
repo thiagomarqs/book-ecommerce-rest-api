@@ -39,9 +39,8 @@ Basically, this is the structure:
 ## Running on your machine
 | Step | Command |
 | :------ | :----- |
-| 1. Install dependencies | `mvn clean install -DskipTests` |
-| 2. Build | `mvn package -DskipTests` |
-| 3. Run | `mvn spring-boot:run` |
+| 1. Install dependencies and build | `mvn clean install -DskipTests` |
+| 2. Run | `mvn spring-boot:run` |
 
 ## Technologies Used
 These technologies were used:  
